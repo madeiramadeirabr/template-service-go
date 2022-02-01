@@ -26,6 +26,4 @@ COPY --from=build /go-service /go-service
 
 EXPOSE 8080
 
-USER nonroot:nonroot
-
 ENTRYPOINT ["/go-service"]
