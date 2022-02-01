@@ -1,0 +1,11 @@
+
+version: "3.7"
+
+services:
+  # Application
+  goapp:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    ports:
+      - 8080:8080
