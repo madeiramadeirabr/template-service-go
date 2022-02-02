@@ -29,7 +29,8 @@ func GetEnvBool(key string) bool {
 }
 
 func (c AppConfig) Validate() error {
-	return validation.ValidateStruct(&c,
+	return validation.ValidateStruct(
+		&c,
 		validation.Field(&c.Port, validation.Required),
 	)
 }

@@ -2,42 +2,38 @@ package configuration_test
 
 import (
 	configuration "go-service-template/internal/config"
+	"go-service-template/pkg/utils"
 	"os"
 	"testing"
 )
 
 func TestGetEnvString(t *testing.T) {
-	//given
-	os.Setenv("TEST_ENV_STRING", "test")
-	//when
+	err := os.Setenv("TEST_ENV_STRING", "test")
+	utils.Fck(err)
 	value := configuration.GetEnvString("TEST_ENV_STRING")
-	//then
 	if value != "test" {
 		t.Errorf("Expected value to be 'test', but got '%s'", value)
 	}
 }
 
 func TestGetEnvBool(t *testing.T) {
-	//given
-	os.Setenv("TEST_ENV_BOOL", "true")
-	//when
+	err := os.Setenv("TEST_ENV_BOOL", "true")
+	utils.Fck(err)
 	value := configuration.GetEnvBool("TEST_ENV_BOOL")
-	//then
 	if value != true {
 		t.Errorf("Expected value to be 'true', but got '%t'", value)
 	}
 }
 
 func TestLoadEnvWithNoError(t *testing.T) {
-	//given
-	os.Setenv("PORT", "8080")
-	os.Setenv("DEV_ENV", "true")
-	//when
-	config, error := configuration.LoadConfig()
-	if error != nil {
-		t.Errorf("Expected no error, but got '%s'", error)
+	err := os.Setenv("PORT", "8080")
+	utils.Fck(err)
+	err = os.Setenv("DEV_ENV", "true")
+	utils.Fck(err)
+	config, err := configuration.LoadConfig()
+	if err != nil {
+		t.Errorf("Expected no error, but got '%s'", err)
 	}
-	//then
 	if config.Port != "8080" {
 		t.Errorf("Expected value to be '8080', but got '%s'", config.Port)
 	}
@@ -47,12 +43,12 @@ func TestLoadEnvWithNoError(t *testing.T) {
 }
 
 func TestLoadEnvWithMissingPort(t *testing.T) {
-	//given
-	os.Unsetenv("PORT")
-	os.Setenv("DEV_ENV", "true")
-	//when
-	_, error := configuration.LoadConfig()
-	if error == nil {
+	envErr := os.Unsetenv("PORT")
+	utils.Fck(envErr)
+	envErr = os.Setenv("DEV_ENV", "true")
+	utils.Fck(envErr)
+	_, configErr := configuration.LoadConfig()
+	if configErr == nil {
 		t.Errorf("Expected error, but got no error")
 	}
 }

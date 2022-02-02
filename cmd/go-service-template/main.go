@@ -1,12 +1,13 @@
 package main
 
-import configuration "go-service-template/internal/config"
+import (
+	"fmt"
+	configuration "go-service-template/internal/config"
+	"go-service-template/pkg/utils"
+)
 
 func main() {
-	config, error := configuration.LoadConfig()
-	if error != nil {
-		panic(error)
-	}
-
-	panic(config)
+	config, err := configuration.LoadConfig()
+	utils.Fck(err)
+	fmt.Println("🧜🏻‍ Core APIs Go Service Template Listening on port ", config.Port)
 }
