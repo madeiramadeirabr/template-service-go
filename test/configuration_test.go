@@ -7,6 +7,7 @@ import (
 	"testing"
 )
 
+// TODO: add assertion package and describe tests using t.Run
 func TestGetEnvString(t *testing.T) {
 	err := os.Setenv("TEST_ENV_STRING", "test")
 	utils.Fck(err)
