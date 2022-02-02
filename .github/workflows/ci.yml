@@ -9,7 +9,7 @@ on:
       - "production"
 
 jobs:
-  build:
+  unit-tests:
     runs-on: ubuntu-latest
     strategy:
       matrix:
