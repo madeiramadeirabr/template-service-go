@@ -1,0 +1,11 @@
+
+version: "3.7"
+
+services:
+  # Application
+  go-service-template:
+    build:
+      context: .
+      dockerfile: cmd/go-service-template/Dockerfile
+    ports:
+      - 8080:8080
