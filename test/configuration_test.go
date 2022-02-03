@@ -1,67 +1,57 @@
 package configuration_test
 
 import (
+	"fmt"
 	configuration "go-service-template/internal/config"
-	"go-service-template/pkg/utils"
 	"os"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
-// TODO: add assertion package
 func TestConfiguration(t *testing.T) {
 	t.Run("GetEnvString", func(t *testing.T) {
 		t.Run("It should correctly get an existing string variable from the system env", func(t *testing.T) {
-			err := os.Setenv("TEST_ENV_STRING", "test")
-			utils.Fck(err)
+			os.Setenv("TEST_ENV_STRING", "test")
 			value := configuration.GetEnvString("TEST_ENV_STRING")
-			if value != "test" {
-				t.Errorf("Expected value to be 'test', but got '%s'", value)
-			}
+			assert.Equal(t, value, "test", fmt.Sprintf("Expected value to be 'test', but got '%s'", value))
 		})
+
+		defer os.Unsetenv("TEST_ENV_STRING")
 	})
 
 	t.Run("GetEnvString", func(t *testing.T) {
 		t.Run("It should correctly get an existing boolean variable from the system env", func(t *testing.T) {
-			err := os.Setenv("TEST_ENV_BOOL", "true")
-			utils.Fck(err)
+			os.Setenv("TEST_ENV_BOOL", "true")
 			value := configuration.GetEnvBool("TEST_ENV_BOOL")
-			if value != true {
-				t.Errorf("Expected value to be 'true', but got '%t'", value)
-			}
+			assert.Equal(t, value, true, fmt.Sprintf("Expected value to be 'true', but got '%t'", value))
 		})
+
+		defer os.Unsetenv("TEST_ENV_BOOL")
 	})
 
 	t.Run("GetEnvString", func(t *testing.T) {
-		err := os.Setenv("PORT", "8080")
-		utils.Fck(err)
-		err = os.Setenv("DEV_ENV", "true")
-		utils.Fck(err)
+		os.Setenv("PORT", "8080")
+		os.Setenv("DEV_ENV", "true")
+
 		config, err := configuration.LoadConfig()
 
 		t.Run("It should return load config variables without errors", func(t *testing.T) {
-			if err != nil {
-				t.Errorf("Expected no error, but got '%s'", err)
-			}
+			assert.Nil(t, err, fmt.Sprintf("Expected no error, but got '%s'", err))
 		})
 
 		t.Run("It should return a config struct with all mandatory variables correctly filled", func(t *testing.T) {
-			if config.Port != "8080" {
-				t.Errorf("Expected value to be '8080', but got '%s'", config.Port)
-			}
-			if config.Dev != true {
-				t.Errorf("Expected value to be 'true', but got '%t'", config.Dev)
-			}
+			assert.Equal(t, config.Port, "8080", fmt.Sprintf("Expected value to be '8080', but got '%s'", config.Port))
+			assert.Equal(t, config.Dev, true, fmt.Sprintf("Expected value to be 'true', but got '%t'", config.Dev))
 		})
 
 		t.Run("It should return an error when there's a missing required variable", func(t *testing.T) {
-			envErr := os.Unsetenv("PORT")
-			utils.Fck(envErr)
-			envErr = os.Setenv("DEV_ENV", "true")
-			utils.Fck(envErr)
+			os.Unsetenv("PORT")
 			_, configErr := configuration.LoadConfig()
-			if configErr == nil {
-				t.Errorf("Expected error, but got no error")
-			}
+			assert.NotNil(t, configErr, "Expected error, but got nil")
 		})
+
+		defer os.Unsetenv("PORT")
+		defer os.Unsetenv("DEV_ENV")
 	})
 }
