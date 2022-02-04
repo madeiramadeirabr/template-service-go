@@ -1,5 +1,7 @@
 [COREAPI-XXXX]
+
 ## Proposed changes
+
 Describe your changes briefly and objectively.
 * Foo
 * Bar
