@@ -15,8 +15,12 @@ MadeiraMadeira boilerplate project to build scalable, testable and high performa
 - [soon] `logger`: easily manage application logs;
 - Docker infrastructure with Docker Compose.
 
-
 ## Local development with Docker
+
+### Installation
+```bash
+$ cp .env.example .env
+```
 
 ### Running the app
 
@@ -28,16 +32,12 @@ $ docker-compose up
 
 ### Installation
 ```bash
+$ cp .env.example .env
 $ go mod download
 ```
 
 ### Running the app
 
- Unix-like systems
-```bash
-$ go run .\cmd\go-service-template\main.go
-```
-⊞ Windows
 ```bash
 $ go run ./cmd/go-service-template/main.go
 ```
