@@ -34,6 +34,7 @@ func TestConfiguration(t *testing.T) {
 
 	t.Run("GetEnvString", func(t *testing.T) {
 		_ = os.Setenv("PORT", "8080")
+		_ = os.Setenv("APPLICATION_ENV", "TEST")
 		_ = os.Setenv("TESTING", "true")
 		_ = os.Setenv("APPLICATION_ENV", "TEST")
 

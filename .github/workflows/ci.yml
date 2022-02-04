@@ -1,0 +1,25 @@
+name: Continuous Integration Testing
+
+on:
+  pull_request:
+    branches:
+      - "production"
+  push:
+    branches:
+      - "production"
+
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        go: [ '1.17' ]
+    name: Test with go ${{ matrix.go }}
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup go
+      uses: actions/setup-go@v2
+      with:
+        go-version: ${{ matrix.go }}
+    - run: go test -mod=readonly -v ./test
