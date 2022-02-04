@@ -21,7 +21,7 @@ func TestConfiguration(t *testing.T) {
 		}()
 	})
 
-	t.Run("GetEnvString", func(t *testing.T) {
+	t.Run("GetEnvBool", func(t *testing.T) {
 		t.Run("It should correctly get an existing boolean variable from the system env", func(t *testing.T) {
 			_ = os.Setenv("TEST_ENV_BOOL", "true")
 			value := configuration.GetEnvBool("TEST_ENV_BOOL")
@@ -32,7 +32,7 @@ func TestConfiguration(t *testing.T) {
 		}()
 	})
 
-	t.Run("GetEnvString", func(t *testing.T) {
+	t.Run("LoadConfig", func(t *testing.T) {
 		_ = os.Setenv("PORT", "8080")
 		_ = os.Setenv("APPLICATION_ENV", "TEST")
 		_ = os.Setenv("TESTING", "true")
