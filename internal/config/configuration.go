@@ -32,10 +32,7 @@ func GetEnvBool(key string) bool {
 }
 
 func (c AppConfig) Validate() error {
-	return validation.ValidateStruct(
-		&c,
-		validation.Field(&c.Port, validation.Required),
-	)
+	return validation.ValidateStruct(&c, validation.Field(&c.Port, validation.Required))
 }
 
 func LoadConfig() (*AppConfig, error) {

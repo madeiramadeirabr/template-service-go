@@ -9,5 +9,5 @@ import (
 func main() {
 	config, err := configuration.LoadConfig()
 	utils.Fck(err)
-	fmt.Println("🧜🏻‍ Core APIs Go Service Template Listening on port ", config.Port)
+	fmt.Println("🧜‍ Core APIs Go Service Template Listening on port ", config.Port)
 }
