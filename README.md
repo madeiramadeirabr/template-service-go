@@ -2,22 +2,21 @@
 
 MadeiraMadeira boilerplate project to build scalable, testable and high performance Go microservices.
 
-* Note env file are just required for development
 ## Stack
 - Go
 - Docker
 - gRPC
 
-## Featues
-- REST and gRPC layers;
-- Automatic pre-commit linting;
-- `ConfigService`: easily manage environment variables;
-- `Health` module: a gRPC and a REST endpoint that returns relevant information about the application status;
-- `LogService`: easily manage application logs;
+## Features
+- [soon] REST and gRPC layers;
+- [soon] Automatic pre-commit linting and testing;
+- `configuration`: easily manage environment variables;
+- [soon] `health_check` module: a gRPC and a REST endpoint that returns relevant information about the application status;
+- [soon] `logger`: easily manage application logs;
 - Docker infrastructure with Docker Compose.
 
 
-## Docker for local development
+## Local development with Docker
 
 ### Running the app
 
@@ -33,8 +32,14 @@ $ go mod download
 ```
 
 ### Running the app
+
+ Unix-like systems
 ```bash
 $ go run .\cmd\go-service-template\main.go
+```
+⊞ Windows
+```bash
+$ go run ./cmd/go-service-template/main.go
 ```
 
 ## Test
@@ -44,10 +49,10 @@ $ go run .\cmd\go-service-template\main.go
 $ go test ./test/
 
 # e2e tests
-// TODO
+[soon]
 
 # test coverage
-// TODO
+[soon]
 ``` 
 ---
 Squad Core APIs
