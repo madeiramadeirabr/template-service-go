@@ -1,15 +1,18 @@
 package configuration
 
 import (
+	"fmt"
 	"os"
 	"strconv"
 
 	validation "github.com/go-ozzo/ozzo-validation"
+	"github.com/joho/godotenv"
 )
 
 type AppConfig struct {
-	Port string `env:"PORT"`
-	Dev  bool   `env:"DEV_ENV"`
+	Port           string `env:"PORT"`
+	ApplicationEnv string `env:"APPLICATION_ENV"`
+	IsTesting      bool   `env:"TESTING"`
 }
 
 func GetEnvString(key string) string {
@@ -37,7 +40,12 @@ func (c AppConfig) Validate() error {
 
 func LoadConfig() (*AppConfig, error) {
 	config := AppConfig{}
+	err := godotenv.Load()
+	if err != nil {
+		fmt.Println("Error loading .env file")
+	}
 	config.Port = GetEnvString("PORT")
-	config.Dev = GetEnvBool("DEV_ENV")
+	config.ApplicationEnv = GetEnvString("APPLICATION_ENV")
+	config.IsTesting = GetEnvBool("TESTING")
 	return &config, config.Validate()
 }

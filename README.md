@@ -2,6 +2,7 @@
 
 MadeiraMadeira boilerplate project to build scalable, testable and high performance Go microservices.
 
+* Note env file are just required for development
 ## Stack
 - Go
 - Docker

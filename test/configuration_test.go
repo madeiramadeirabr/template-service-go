@@ -32,7 +32,7 @@ func TestConfiguration(t *testing.T) {
 
 	t.Run("GetEnvString", func(t *testing.T) {
 		os.Setenv("PORT", "8080")
-		os.Setenv("DEV_ENV", "true")
+		os.Setenv("TESTING", "true")
 
 		config, err := configuration.LoadConfig()
 
@@ -42,7 +42,7 @@ func TestConfiguration(t *testing.T) {
 
 		t.Run("It should return a config struct with all mandatory variables correctly filled", func(t *testing.T) {
 			assert.Equal(t, config.Port, "8080", fmt.Sprintf("Expected value to be '8080', but got '%s'", config.Port))
-			assert.Equal(t, config.Dev, true, fmt.Sprintf("Expected value to be 'true', but got '%t'", config.Dev))
+			assert.Equal(t, config.IsTesting, true, fmt.Sprintf("Expected value to be 'true', but got '%t'", config.IsTesting))
 		})
 
 		t.Run("It should return an error when there's a missing required variable", func(t *testing.T) {
@@ -52,6 +52,6 @@ func TestConfiguration(t *testing.T) {
 		})
 
 		defer os.Unsetenv("PORT")
-		defer os.Unsetenv("DEV_ENV")
+		defer os.Unsetenv("TESTING")
 	})
 }
