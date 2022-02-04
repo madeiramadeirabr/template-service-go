@@ -35,6 +35,7 @@ func (c AppConfig) Validate() error {
 	return validation.ValidateStruct(
 		&c,
 		validation.Field(&c.Port, validation.Required),
+		validation.Field(&c.ApplicationEnv, validation.Required),
 	)
 }
 
