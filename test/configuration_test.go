@@ -12,7 +12,7 @@ import (
 func TestConfiguration(t *testing.T) {
 	t.Run("GetEnvString", func(t *testing.T) {
 		t.Run("It should correctly get an existing string variable from the system env", func(t *testing.T) {
-			_ = os.Setenv("TEST_ENV_STRING", "test")
+			//_ = os.Setenv("TEST_ENV_STRING", "test")
 			value := configuration.GetEnvString("TEST_ENV_STRING")
 			assert.Equal(t, value, "test", fmt.Sprintf("Expected value to be 'test', but got '%s'", value))
 		})
