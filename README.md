@@ -2,6 +2,7 @@
 
 MadeiraMadeira boilerplate project to build scalable, testable and high performance Go microservices.
 
+* Note env file are just required for development
 ## Stack
 - Go
 - Docker
@@ -18,10 +19,6 @@ MadeiraMadeira boilerplate project to build scalable, testable and high performa
 
 ## Docker for local development
 
-### Installation
-
-// TODO
-
 ### Running the app
 
 ```bash
@@ -31,16 +28,20 @@ $ docker-compose up
 ## Local development
 
 ### Installation
-// TODO
+```bash
+$ go mod download
+```
 
 ### Running the app
-// TODO
+```bash
+$ go run .\cmd\go-service-template\main.go
+```
 
 ## Test
 
 ```bash
 # unit tests
-// TODO
+$ go test ./test/
 
 # e2e tests
 // TODO
@@ -49,5 +50,4 @@ $ docker-compose up
 // TODO
 ``` 
 ---
-Squad Core APIs 
-e
+Squad Core APIs
