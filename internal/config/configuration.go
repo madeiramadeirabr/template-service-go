@@ -43,7 +43,7 @@ func LoadConfig() (*AppConfig, error) {
 	config := AppConfig{}
 	err := godotenv.Load()
 	if err != nil {
-		fmt.Println("Error loading .env file")
+		fmt.Println("[WARN] .env file not found. Loading from system environment")
 	}
 	config.Port = GetEnvString("PORT")
 	config.ApplicationEnv = GetEnvString("APPLICATION_ENV")
