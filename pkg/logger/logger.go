@@ -62,6 +62,7 @@ func (logger Logger) formatMessage(
 	return string(formattedLogMessage), nil
 }
 
+// Emergency TODO: add a struct called LoggerOptions with context and event as optional parameters
 func (logger Logger) Emergency(message string, context interface{}) (string, error) {
 	formattedMessage, err := logger.formatMessage(
 		message,
