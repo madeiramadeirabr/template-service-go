@@ -1,26 +1,16 @@
-
 ##
 ## Build
 ##
 FROM golang:1.17-alpine AS build
 
-WORKDIR /app
+RUN apk add curl
+RUN curl -sSfL https://raw.githubusercontent.com/cosmtrek/air/master/install.sh | sh -s -- -b $(go env GOPATH)/bin
 
-COPY ./ ./
+WORKDIR /app
+ADD . /app
 
 RUN go mod download
 
-RUN go build -o /go-service "./cmd/go-service-template" 
-
-##
-## Deploy
-##
-FROM build as run
-
-WORKDIR /
-
-COPY --from=build /go-service /go-service
-
 EXPOSE 8080
 
-ENTRYPOINT ["/go-service"]
+ENTRYPOINT ["air", "-c", "./cmd/go-service-template/air.toml"]
