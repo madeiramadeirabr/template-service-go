@@ -28,7 +28,7 @@ RUN CGO_ENABLED=0 GOOS=linux go build -a -o go-service "./cmd/go_service_templat
 ##
 ## Stage: Production
 ##
-FROM builder as production
+FROM alpine:latest as production
 WORKDIR /production
 COPY --from=builder /app/go-service .
-ENTRYPOINT ["/go-service"]
+ENTRYPOINT ["/production/go-service"]
