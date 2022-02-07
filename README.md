@@ -17,9 +17,9 @@ MadeiraMadeira boilerplate project to build scalable, testable and high performa
 
 ## Local development with Docker
 
-### Installation
+### Setup
 ```bash
-$ cp .env.example .env
+$ ./setup.sh
 ```
 
 ### Running the app
@@ -30,9 +30,9 @@ $ docker-compose -f docker-compose.dev.yml up
 
 ## Local development
 
-### Installation
+### Setup
 ```bash
-$ cp .env.example .env
+$ ./setup.sh
 $ go mod download
 ```
 
@@ -54,5 +54,18 @@ $ go test ./test/
 # test coverage
 [soon]
 ``` 
+
+### Improve tests output
+
+To see a more friendly test output, install `gotestsum` globally by running
+```bash
+$ go install gotest.tools/gotestsum@latest
+```
+And execute as
+```bash
+$ gotestsum --format testname 
+```
+at the project root directory.
+
 ---
 Squad Core APIs
