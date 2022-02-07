@@ -10,7 +10,7 @@ COPY ./ ./
 
 RUN go mod download
 
-RUN go build -o /go-service "./cmd/go-service-template" 
+RUN go build -o /go-service "./cmd/go_service_template" 
 
 ##
 ## Deploy
