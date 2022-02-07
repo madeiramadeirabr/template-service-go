@@ -5,7 +5,7 @@ services:
   go-service-template:
     build:
       context: .
-      dockerfile: cmd/go-service-template/Dockerfile
+      dockerfile: cmd/go_service_template/Dockerfile
       target: development
     ports:
       - 8080:8080
