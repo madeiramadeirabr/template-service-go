@@ -22,4 +22,4 @@ jobs:
       uses: actions/setup-go@v2
       with:
         go-version: ${{ matrix.go }}
-    - run: go test -mod=readonly -v ./test
+    - run: go test -mod=readonly -v ./...
