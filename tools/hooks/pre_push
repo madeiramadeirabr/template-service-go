@@ -1,2 +1,2 @@
 #!/bin/sh
-go test ./test/
+go test ./...
