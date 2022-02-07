@@ -6,14 +6,11 @@ FROM golang:1.17-alpine AS build
 
 WORKDIR /app
 
-COPY go.mod ./
-COPY go.sum ./
+COPY ./ ./
 
 RUN go mod download
 
-COPY *.go ./
-
-RUN go build -o /go-service
+RUN go build -o /go-service "./cmd/go-service-template" 
 
 ##
 ## Deploy
