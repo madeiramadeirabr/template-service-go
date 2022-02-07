@@ -65,5 +65,7 @@ And execute as
 ```bash
 $ gotestsum --format testname 
 ```
+at the project root directory.
+
 ---
 Squad Core APIs
