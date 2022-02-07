@@ -4,6 +4,8 @@
 FROM golang:1.17-alpine AS base
 WORKDIR /app
 ADD . /app
+RUN go mod vendor \
+    && go mod download
 
 
 ##
@@ -11,9 +13,7 @@ ADD . /app
 ##
 FROM base AS development
 RUN apk add curl \
-    && curl -sSfL https://raw.githubusercontent.com/cosmtrek/air/master/install.sh | sh -s -- -b $(go env GOPATH)/bin \
-    && go mod vendor \
-    && go mod download
+    && curl -sSfL https://raw.githubusercontent.com/cosmtrek/air/master/install.sh | sh -s -- -b $(go env GOPATH)/bin
 ENTRYPOINT ["air", "-c", "./cmd/go-service-template/air.toml"]
 
 
@@ -22,9 +22,7 @@ ENTRYPOINT ["air", "-c", "./cmd/go-service-template/air.toml"]
 ##
 FROM base AS builder
 COPY . .
-RUN go mod vendor \
-    && go mod download \
-    && CGO_ENABLED=0 GOOS=linux go build -a -o go-service "./cmd/go-service-template"
+RUN CGO_ENABLED=0 GOOS=linux go build -a -o go-service "./cmd/go-service-template"
 
 
 ##
