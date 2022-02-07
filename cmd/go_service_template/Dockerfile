@@ -1,26 +1,34 @@
-
 ##
-## Build
+## Stage: Base
 ##
-FROM golang:1.17-alpine AS build
-
+FROM golang:1.17-alpine AS base
 WORKDIR /app
+ADD . /app
+RUN go mod vendor \
+    && go mod download
 
-COPY ./ ./
-
-RUN go mod download
-
-RUN go build -o /go-service "./cmd/go_service_template" 
 
 ##
-## Deploy
+## Stage: Development
 ##
-FROM build as run
+FROM base AS development
+RUN apk add curl \
+    && curl -sSfL https://raw.githubusercontent.com/cosmtrek/air/master/install.sh | sh -s -- -b $(go env GOPATH)/bin
+ENTRYPOINT ["air", "-c", "./cmd/go_service_template/air.toml"]
 
-WORKDIR /
 
-COPY --from=build /go-service /go-service
+##
+## Stage: Build
+##
+FROM base AS builder
+COPY . .
+RUN CGO_ENABLED=0 GOOS=linux go build -a -o go-service "./cmd/go_service_template"
 
-EXPOSE 8080
 
-ENTRYPOINT ["/go-service"]
+##
+## Stage: Production
+##
+FROM alpine:latest as production
+WORKDIR /production
+COPY --from=builder /app/go-service .
+ENTRYPOINT ["/production/go-service"]
