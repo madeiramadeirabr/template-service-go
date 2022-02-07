@@ -2,6 +2,7 @@ package Logger
 
 import (
 	"encoding/json"
+	"fmt"
 	"go-service-template/pkg/utils"
 	"time"
 )
@@ -10,6 +11,7 @@ type Logger struct {
 	SessionId   string
 	ServiceName string
 	TraceId     string
+	Clock       utils.ClockInterface
 }
 
 type LogLevel string
@@ -25,7 +27,7 @@ const (
 
 type LogMessage struct {
 	GlobalEventTimestamp string   `json:"global_event_timestamp"`
-	GlobalEventName      string   `json:"global_event_name"`
+	GlobalEventName      string   `json:"global_event_name,omitempty"`
 	Level                LogLevel `json:"level"`
 	Context              string   `json:"context"`
 	Message              string   `json:"message"`
@@ -34,17 +36,15 @@ type LogMessage struct {
 	TraceId              string   `json:"trace_id"`
 }
 
-// FormatMessage TODO: see default Go logging package
-func (logger Logger) FormatMessage(
+func (logger Logger) formatMessage(
 	message string,
 	context string,
-	globalEventName string,
 	level LogLevel,
 	timestamp time.Time,
-) string {
+	globalEventName string,
+) (string, error) {
 	logMessage := LogMessage{
 		GlobalEventTimestamp: timestamp.String(),
-		GlobalEventName:      globalEventName,
 		Level:                level,
 		Context:              context,
 		Message:              message,
@@ -52,13 +52,45 @@ func (logger Logger) FormatMessage(
 		SessionId:            logger.SessionId,
 		TraceId:              logger.TraceId,
 	}
-	formattedLogMessage, err := json.Marshal(logMessage)
-	utils.Fck(err)
-	return string(formattedLogMessage)
+	if globalEventName != "" {
+		logMessage.GlobalEventName = globalEventName
+	}
+	formattedLogMessage, err := json.MarshalIndent(logMessage, "", "    ")
+	if err != nil {
+		return "", err
+	}
+	return string(formattedLogMessage), nil
 }
 
-func (logger Logger) Emergency(message string) {
-	// TODO
+func (logger Logger) Emergency(message string, context interface{}) (string, error) {
+	formattedMessage, err := logger.formatMessage(
+		message,
+		fmt.Sprintf("%s", context),
+		LogLevelEmergency,
+		logger.Clock.GetCurrentTimestamp(),
+		"",
+	)
+	if err != nil {
+		return "", err
+	}
+	fmt.Print(formattedMessage)
+	return formattedMessage, nil
+}
+
+// EmergencyEvent TODO: eventName should be a fixed enum with the available event topics
+func (logger Logger) EmergencyEvent(message string, context interface{}, eventName string) (string, error) {
+	formattedMessage, err := logger.formatMessage(
+		message,
+		fmt.Sprintf("%s", context),
+		LogLevelEmergency,
+		logger.Clock.GetCurrentTimestamp(),
+		eventName,
+	)
+	if err != nil {
+		return "", err
+	}
+	fmt.Print(formattedMessage)
+	return formattedMessage, nil
 }
 
 func (logger Logger) Error(message string) {
