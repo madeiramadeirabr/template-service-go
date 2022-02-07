@@ -14,7 +14,7 @@ RUN go mod vendor \
 FROM base AS development
 RUN apk add curl \
     && curl -sSfL https://raw.githubusercontent.com/cosmtrek/air/master/install.sh | sh -s -- -b $(go env GOPATH)/bin
-ENTRYPOINT ["air", "-c", "./cmd/go-service-template/air.toml"]
+ENTRYPOINT ["air", "-c", "./cmd/go_service_template/air.toml"]
 
 
 ##
@@ -22,7 +22,7 @@ ENTRYPOINT ["air", "-c", "./cmd/go-service-template/air.toml"]
 ##
 FROM base AS builder
 COPY . .
-RUN CGO_ENABLED=0 GOOS=linux go build -a -o go-service "./cmd/go-service-template"
+RUN CGO_ENABLED=0 GOOS=linux go build -a -o go-service "./cmd/go_service_template"
 
 
 ##
