@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	configuration "go-service-template/internal/config"
+	"go-service-template/internal/configuration"
 	healthCheck "go-service-template/internal/health-check/routes"
 
 	"go-service-template/pkg/utils"
@@ -12,7 +12,7 @@ import (
 )
 
 func main() {
-	config, err := configuration.LoadConfig()
+	config, err := configuration.Load()
 	utils.Fck(err)
 
 	app := fiber.New()

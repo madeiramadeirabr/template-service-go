@@ -46,7 +46,7 @@ $ go run ./cmd/go-service-template/main.go
 
 ```bash
 # unit tests
-$ go test ./test/
+$ go test ./...
 
 # e2e tests
 [soon]

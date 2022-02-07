@@ -39,7 +39,7 @@ func (c AppConfig) Validate() error {
 	)
 }
 
-func LoadConfig() (*AppConfig, error) {
+func Load() (*AppConfig, error) {
 	config := AppConfig{}
 	err := godotenv.Load()
 	if err != nil {
