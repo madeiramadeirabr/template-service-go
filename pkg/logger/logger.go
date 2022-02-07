@@ -62,20 +62,9 @@ func (logger Logger) formatMessage(
 	return string(formattedLogMessage), nil
 }
 
-// Emergency TODO: add a struct called LoggerOptions with context and event as optional parameters
+// Emergency TODO: add a struct called LoggerOptions with context and event name as optional parameters
 func (logger Logger) Emergency(message string, context interface{}) (string, error) {
-	formattedMessage, err := logger.formatMessage(
-		message,
-		fmt.Sprintf("%s", context),
-		LogLevelEmergency,
-		logger.Clock.GetCurrentTimestamp(),
-		"",
-	)
-	if err != nil {
-		return "", err
-	}
-	fmt.Print(formattedMessage)
-	return formattedMessage, nil
+	return logger.EmergencyEvent(message, context, "")
 }
 
 // EmergencyEvent TODO: eventName should be a fixed enum with the available event topics
