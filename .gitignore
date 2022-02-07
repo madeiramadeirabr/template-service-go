@@ -40,3 +40,6 @@ go.work
 
 # Env file
 .env
+
+# Temporary files
+tmp/*
