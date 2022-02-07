@@ -15,10 +15,11 @@ type LogMessage struct {
 	TraceId              string `json:"trace_id"`
 }
 
+// FormatMessage TODO: see default Go logging package
 func FormatMessage(message string, error error) string {
-	// Create a struct
-	// Transform into JSON String
-	// return
+	// 1) Fulfill a LogMessage struct
+	// 2) Transform into a JSON String
+	// 3) return
 	return "foo"
 }
 
