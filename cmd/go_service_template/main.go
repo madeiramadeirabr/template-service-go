@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"go-service-template/internal/configuration"
-	healthCheck "go-service-template/internal/health-check/routes"
+	healthCheckRouter "go-service-template/internal/health-check/routes"
 
 	"go-service-template/pkg/utils"
 	"log"
@@ -16,7 +16,7 @@ func main() {
 	utils.Fck(err)
 
 	app := fiber.New()
-	healthCheck.RegisterRoutes(app)
+	healthCheckRouter.RegisterRoutes(app)
 
 	fmt.Println("🧜‍ Core APIs Go Service Template Listening on port", config.Port)
 

@@ -1,4 +1,4 @@
-package healthCheck
+package healthCheckRouter
 
 import (
 	healthCheckHandler "go-service-template/internal/health-check/handlers"
@@ -7,5 +7,7 @@ import (
 )
 
 func RegisterRoutes(app *fiber.App) {
-	app.Get("/health-check", healthCheckHandler.GetStatus)
+	app.Get("/health-check", func(c *fiber.Ctx) error {
+		return c.Status(200).JSON(healthCheckHandler.GetStatus())
+	})
 }
