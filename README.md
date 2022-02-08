@@ -62,7 +62,7 @@ To see a more friendly test output, install `gotestsum` globally by running
 ```bash
 $ go install gotest.tools/gotestsum@latest
 ```
-And execute as below at the project root directory.
+And execute in project root directory.
 ```bash
 $ gotestsum --format testname 
 ```
