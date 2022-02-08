@@ -2,10 +2,11 @@ package logger_test
 
 import (
 	"fmt"
-	"github.com/stretchr/testify/assert"
 	Logger "go-service-template/pkg/logger"
 	"go-service-template/pkg/utils"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestLogger(t *testing.T) {
