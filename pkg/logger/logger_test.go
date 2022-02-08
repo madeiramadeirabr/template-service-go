@@ -21,8 +21,8 @@ func TestLogger(t *testing.T) {
 	}
 	message := "foo"
 
-	t.Run("Emergency", func(t *testing.T) {
-		t.Run("Should return an EMERGENCY log message correctly formatted without optional fields", func(t *testing.T) {
+	t.Run("Log", func(t *testing.T) {
+		t.Run("Should return a log message correctly formatted without optional fields", func(t *testing.T) {
 			jsonStringMessage := fmt.Sprintf(
 				`{"global_event_timestamp":"%s","level":"%s","message":"%s","service_name":"%s","session_id":"%s","trace_id":"%s"}`,
 				dateFixture.String(),
@@ -34,14 +34,11 @@ func TestLogger(t *testing.T) {
 			)
 			expectedMessage, err := utils.IndentJsonString(jsonStringMessage)
 			assert.Nil(t, err, fmt.Sprintf("Expected no error, got: '%s'", err))
-			loggedMessage, err := logger.Emergency(message)
+			loggedMessage, err := logger.Log(message, Logger.LogLevelEmergency, Logger.LogMessageOptions{})
 			assert.Nil(t, err, fmt.Sprintf("Expected no error, got: '%s'", err))
 			assert.Equal(t, expectedMessage, loggedMessage)
 		})
-	})
-
-	t.Run("EmergencyWithOptions", func(t *testing.T) {
-		t.Run("Should return an EMERGENCY log message correctly formatted with the optional fields set", func(t *testing.T) {
+		t.Run("Should return a log message correctly formatted with the optional fields set", func(t *testing.T) {
 			globalEventName := "GO_SERVICE_TEMPLATE_EXAMPLE_EVENT_TOPIC"
 			context := map[string]string{
 				"bar": "baz",
@@ -59,36 +56,13 @@ func TestLogger(t *testing.T) {
 			)
 			expectedMessage, err := utils.IndentJsonString(jsonStringMessage)
 			assert.Nil(t, err, fmt.Sprintf("Expected no error, got: '%s'", err))
-			loggedMessage, err := logger.EmergencyWithOptions(
+			loggedMessage, err := logger.Log(
 				message,
+				Logger.LogLevelEmergency,
 				Logger.LogMessageOptions{GlobalEventName: globalEventName, Context: context},
 			)
 			assert.Nil(t, err, fmt.Sprintf("Expected no error, got: '%s'", err))
 			assert.Equal(t, expectedMessage, loggedMessage)
 		})
-	})
-
-	t.Run("Error", func(t *testing.T) {
-		// TODO
-	})
-
-	t.Run("Warn", func(t *testing.T) {
-		// TODO
-	})
-
-	t.Run("Info", func(t *testing.T) {
-		// TODO
-	})
-
-	t.Run("Debug", func(t *testing.T) {
-		// TODO
-	})
-
-	t.Run("Trace", func(t *testing.T) {
-		// TODO
-	})
-
-	t.Run("Emergency", func(t *testing.T) {
-		// TODO
 	})
 }

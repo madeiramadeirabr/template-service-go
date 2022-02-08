@@ -39,7 +39,7 @@ $ go mod download
 ### Running the app
 
 ```bash
-$ go run ./cmd/go-service-template/main.go
+$ go run ./cmd/go_service_template/main.go
 ```
 
 ## Test
