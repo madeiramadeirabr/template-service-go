@@ -16,7 +16,7 @@ func TestLogger(t *testing.T) {
 	dateFixture := utils.ClockMock{}.GetCurrentTimestamp()
 	logger := Logger.Logger{
 		TraceID:     traceID,
-		SessionID:   sessionID,
+		SessionId:   sessionID,
 		ServiceName: serviceName,
 		Clock:       utils.ClockMock{},
 	}
