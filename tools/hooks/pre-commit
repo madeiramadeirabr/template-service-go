@@ -29,7 +29,9 @@ do
   $GOIMPORTS -w $FILE
 
   # Run golint on the staged file
-  $GOLINT "-set_exit_status" $FILE | grep -v "should have comment"
+  printf "\t\033[32m"
+  $GOLINT $FILE | grep -v "should have comment"
+  printf "\033[0m"
 
   # Run govet on the staged file and check the exit status
   go vet $FILE
