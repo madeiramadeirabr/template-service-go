@@ -8,32 +8,33 @@ import (
 )
 
 type Logger struct {
-	SessionID   string
-	ServiceName string
-	TraceID     string
-	Clock       utils.ClockInterface
+	SessionID                string
+	ServiceName              string
+	TraceID                  string
+	Clock                    utils.ClockInterface
+	IsDevelopmentEnvironment bool
 }
 
-type LogLevel string
+type LogLevelEnum string
 
 const (
-	LogLevelEmergency LogLevel = "EMERGENCY"
-	LogLevelError     LogLevel = "ERROR"
-	LogLevelWarn      LogLevel = "WARN"
-	LogLevelInfo      LogLevel = "INFO"
-	LogLevelDebug     LogLevel = "DEBUG"
-	LogLevelTrace     LogLevel = "TRACE"
+	LogLevelEmergency LogLevelEnum = "EMERGENCY"
+	LogLevelError     LogLevelEnum = "ERROR"
+	LogLevelWarn      LogLevelEnum = "WARN"
+	LogLevelInfo      LogLevelEnum = "INFO"
+	LogLevelDebug     LogLevelEnum = "DEBUG"
+	LogLevelTrace     LogLevelEnum = "TRACE"
 )
 
 type LogMessage struct {
-	GlobalEventTimestamp string   `json:"global_event_timestamp"`
-	GlobalEventName      string   `json:"global_event_name,omitempty"`
-	Level                LogLevel `json:"level"`
-	Context              string   `json:"context,omitempty"`
-	Message              string   `json:"message"`
-	ServiceName          string   `json:"service_name"`
-	SessionID            string   `json:"session_id"`
-	TraceID              string   `json:"trace_id"`
+	GlobalEventTimestamp string       `json:"global_event_timestamp"`
+	GlobalEventName      string       `json:"global_event_name,omitempty"`
+	Level                LogLevelEnum `json:"level"`
+	Context              string       `json:"context,omitempty"`
+	Message              string       `json:"message"`
+	ServiceName          string       `json:"service_name"`
+	SessionID            string       `json:"session_id,omitempty"`
+	TraceID              string       `json:"trace_id,omitempty"`
 }
 
 type LogMessageOptions struct {
@@ -43,7 +44,7 @@ type LogMessageOptions struct {
 
 func (logger Logger) formatMessage(
 	message string,
-	level LogLevel,
+	level LogLevelEnum,
 	timestamp time.Time,
 	logMessageOptions LogMessageOptions,
 ) (string, error) {
@@ -70,7 +71,7 @@ func (logger Logger) formatMessage(
 	return string(formattedLogMessage), nil
 }
 
-func (logger Logger) Log(message string, logLevel LogLevel, logMessageOptions LogMessageOptions) (string, error) {
+func (logger Logger) Log(message string, logLevel LogLevelEnum, logMessageOptions LogMessageOptions) {
 	formattedMessage, err := logger.formatMessage(
 		message,
 		logLevel,
@@ -78,56 +79,67 @@ func (logger Logger) Log(message string, logLevel LogLevel, logMessageOptions Lo
 		logMessageOptions,
 	)
 	if err != nil {
-		return "", err
+		fmt.Println(err)
 	}
 	fmt.Print(formattedMessage)
-	return formattedMessage, nil
 }
 
-func (logger Logger) Emergency(message string) (string, error) {
-	return logger.Log(message, LogLevelEmergency, LogMessageOptions{})
+func (logger Logger) Emergency(message string) {
+	logger.Log(message, LogLevelEmergency, LogMessageOptions{})
 }
 
-func (logger Logger) EmergencyWithOptions(message string, logMessageOptions LogMessageOptions) (string, error) {
-	return logger.Log(message, LogLevelEmergency, logMessageOptions)
+func (logger Logger) EmergencyWithOptions(message string, logMessageOptions LogMessageOptions) {
+	logger.Log(message, LogLevelEmergency, logMessageOptions)
 }
 
-func (logger Logger) Error(message string) (string, error) {
-	return logger.Log(message, LogLevelError, LogMessageOptions{})
+func (logger Logger) Error(message string) {
+	logger.Log(message, LogLevelError, LogMessageOptions{})
 }
 
-func (logger Logger) ErrorWithOptions(message string, logMessageOptions LogMessageOptions) (string, error) {
-	return logger.Log(message, LogLevelError, logMessageOptions)
+func (logger Logger) ErrorWithOptions(message string, logMessageOptions LogMessageOptions) {
+	logger.Log(message, LogLevelError, logMessageOptions)
 }
 
-func (logger Logger) Warn(message string) (string, error) {
-	return logger.Log(message, LogLevelWarn, LogMessageOptions{})
+func (logger Logger) Warn(message string) {
+	logger.Log(message, LogLevelWarn, LogMessageOptions{})
 }
 
-func (logger Logger) WarnWithOptions(message string, logMessageOptions LogMessageOptions) (string, error) {
-	return logger.Log(message, LogLevelWarn, logMessageOptions)
+func (logger Logger) WarnWithOptions(message string, logMessageOptions LogMessageOptions) {
+	logger.Log(message, LogLevelWarn, logMessageOptions)
 }
 
-func (logger Logger) Info(message string) (string, error) {
-	return logger.Log(message, LogLevelInfo, LogMessageOptions{})
+func (logger Logger) Info(message string) {
+	logger.Log(message, LogLevelInfo, LogMessageOptions{})
 }
 
-func (logger Logger) InfoWithOptions(message string, logMessageOptions LogMessageOptions) (string, error) {
-	return logger.Log(message, LogLevelInfo, logMessageOptions)
+func (logger Logger) InfoWithOptions(message string, logMessageOptions LogMessageOptions) {
+	logger.Log(message, LogLevelInfo, logMessageOptions)
 }
 
-func (logger Logger) Debug(message string) (string, error) {
-	return logger.Log(message, LogLevelDebug, LogMessageOptions{})
+func (logger Logger) Debug(message string) {
+	if !logger.IsDevelopmentEnvironment {
+		return
+	}
+	logger.Log(message, LogLevelDebug, LogMessageOptions{})
 }
 
-func (logger Logger) DebugWithOptions(message string, logMessageOptions LogMessageOptions) (string, error) {
-	return logger.Log(message, LogLevelDebug, logMessageOptions)
+func (logger Logger) DebugWithOptions(message string, logMessageOptions LogMessageOptions) {
+	if !logger.IsDevelopmentEnvironment {
+		return
+	}
+	logger.Log(message, LogLevelDebug, logMessageOptions)
 }
 
-func (logger Logger) Trace(message string) (string, error) {
-	return logger.Log(message, LogLevelTrace, LogMessageOptions{})
+func (logger Logger) Trace(message string) {
+	if !logger.IsDevelopmentEnvironment {
+		return
+	}
+	logger.Log(message, LogLevelTrace, LogMessageOptions{})
 }
 
-func (logger Logger) TraceWithOptions(message string, logMessageOptions LogMessageOptions) (string, error) {
-	return logger.Log(message, LogLevelTrace, logMessageOptions)
+func (logger Logger) TraceWithOptions(message string, logMessageOptions LogMessageOptions) {
+	if !logger.IsDevelopmentEnvironment {
+		return
+	}
+	logger.Log(message, LogLevelTrace, logMessageOptions)
 }
