@@ -38,6 +38,9 @@ func TestLogger(t *testing.T) {
 			assert.Nil(t, err, fmt.Sprintf("Expected no error, got: '%s'", err))
 			assert.Equal(t, expectedMessage, loggedMessage)
 		})
+	})
+
+	t.Run("EmergencyWithOptions", func(t *testing.T) {
 		t.Run("Should return an EMERGENCY log message correctly formatted with the optional fields set", func(t *testing.T) {
 			globalEventName := "GO_SERVICE_TEMPLATE_EXAMPLE_EVENT_TOPIC"
 			context := map[string]string{
@@ -63,10 +66,6 @@ func TestLogger(t *testing.T) {
 			assert.Nil(t, err, fmt.Sprintf("Expected no error, got: '%s'", err))
 			assert.Equal(t, expectedMessage, loggedMessage)
 		})
-	})
-
-	t.Run("EmergencyEvent", func(t *testing.T) {
-
 	})
 
 	t.Run("Error", func(t *testing.T) {
