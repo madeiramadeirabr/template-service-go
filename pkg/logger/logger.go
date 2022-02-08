@@ -29,31 +29,39 @@ type LogMessage struct {
 	GlobalEventTimestamp string   `json:"global_event_timestamp"`
 	GlobalEventName      string   `json:"global_event_name,omitempty"`
 	Level                LogLevel `json:"level"`
-	Context              string   `json:"context"`
+	Context              string   `json:"context,omitempty"`
 	Message              string   `json:"message"`
 	ServiceName          string   `json:"service_name"`
 	SessionId            string   `json:"session_id"`
 	TraceId              string   `json:"trace_id"`
 }
 
+type LogMessageOptions struct {
+	GlobalEventName string      `json:"global_event_name,omitempty"`
+	Context         interface{} `json:"context"`
+}
+
 func (logger Logger) formatMessage(
 	message string,
-	context string,
 	level LogLevel,
 	timestamp time.Time,
-	globalEventName string,
+	logMessageOptions LogMessageOptions,
 ) (string, error) {
 	logMessage := LogMessage{
 		GlobalEventTimestamp: timestamp.String(),
 		Level:                level,
-		Context:              context,
 		Message:              message,
 		ServiceName:          logger.ServiceName,
 		SessionId:            logger.SessionId,
 		TraceId:              logger.TraceId,
 	}
-	if globalEventName != "" {
-		logMessage.GlobalEventName = globalEventName
+	if logMessageOptions.GlobalEventName != "" {
+		logMessage.GlobalEventName = logMessageOptions.GlobalEventName
+	}
+	if logMessageOptions.Context != nil {
+		if context := fmt.Sprintf("%s", logMessageOptions.Context); context != "" {
+			logMessage.Context = context
+		}
 	}
 	formattedLogMessage, err := json.MarshalIndent(logMessage, "", "    ")
 	if err != nil {
@@ -62,19 +70,17 @@ func (logger Logger) formatMessage(
 	return string(formattedLogMessage), nil
 }
 
-// Emergency TODO: add a struct called LoggerOptions with context and event name as optional parameters
-func (logger Logger) Emergency(message string, context interface{}) (string, error) {
-	return logger.EmergencyEvent(message, context, "")
+func (logger Logger) Emergency(message string) (string, error) {
+	return logger.EmergencyWithOptions(message, LogMessageOptions{})
 }
 
-// EmergencyEvent TODO: eventName should be a fixed enum with the available event topics
-func (logger Logger) EmergencyEvent(message string, context interface{}, eventName string) (string, error) {
+// EmergencyWithOptions TODO: eventName should be a fixed enum with the available event topics
+func (logger Logger) EmergencyWithOptions(message string, logMessageOptions LogMessageOptions) (string, error) {
 	formattedMessage, err := logger.formatMessage(
 		message,
-		fmt.Sprintf("%s", context),
 		LogLevelEmergency,
 		logger.Clock.GetCurrentTimestamp(),
-		eventName,
+		logMessageOptions,
 	)
 	if err != nil {
 		return "", err

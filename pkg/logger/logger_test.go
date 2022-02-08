@@ -1,8 +1,6 @@
 package Logger_test
 
 import (
-	"bytes"
-	"encoding/json"
 	"fmt"
 	"github.com/stretchr/testify/assert"
 	Logger "go-service-template/pkg/logger"
@@ -22,36 +20,29 @@ func TestLogger(t *testing.T) {
 		Clock:       utils.ClockMock{},
 	}
 	message := "foo"
-	context := map[string]string{
-		"bar": "baz",
-	}
 
 	t.Run("Emergency", func(t *testing.T) {
-		t.Run("Should return an EMERGENCY log message correctly formatted", func(t *testing.T) {
+		t.Run("Should return an EMERGENCY log message correctly formatted without optional fields", func(t *testing.T) {
 			jsonStringMessage := fmt.Sprintf(
-				`{"global_event_timestamp":"%s","level":"%s","context":"%s","message":"%s","service_name":"%s","session_id":"%s","trace_id":"%s"}`,
+				`{"global_event_timestamp":"%s","level":"%s","message":"%s","service_name":"%s","session_id":"%s","trace_id":"%s"}`,
 				dateFixture.String(),
 				Logger.LogLevelEmergency,
-				fmt.Sprintf("%s", context),
 				message,
 				serviceName,
 				sessionId,
 				traceId,
 			)
-			var prettyJsonStringMessage bytes.Buffer
-			if err := json.Indent(&prettyJsonStringMessage, []byte(jsonStringMessage), "", "    "); err != nil {
-				assert.Nil(t, err, fmt.Sprintf("Expected no error, got: '%s'", err))
-			}
-			expectedMessage := prettyJsonStringMessage.String()
-			loggedMessage, err := logger.Emergency(message, context)
+			expectedMessage, err := utils.IndentJsonString(jsonStringMessage)
+			assert.Nil(t, err, fmt.Sprintf("Expected no error, got: '%s'", err))
+			loggedMessage, err := logger.Emergency(message)
 			assert.Nil(t, err, fmt.Sprintf("Expected no error, got: '%s'", err))
 			assert.Equal(t, expectedMessage, loggedMessage)
 		})
-	})
-
-	t.Run("EmergencyEvent", func(t *testing.T) {
-		t.Run("Should return an EMERGENCY log message correctly formatted with the Global Event Name set", func(t *testing.T) {
+		t.Run("Should return an EMERGENCY log message correctly formatted with the optional fields set", func(t *testing.T) {
 			globalEventName := "GO_SERVICE_TEMPLATE_EXAMPLE_EVENT_TOPIC"
+			context := map[string]string{
+				"bar": "baz",
+			}
 			jsonStringMessage := fmt.Sprintf(
 				`{"global_event_timestamp":"%s","global_event_name":"%s","level":"%s","context":"%s","message":"%s","service_name":"%s","session_id":"%s","trace_id":"%s"}`,
 				dateFixture.String(),
@@ -63,15 +54,17 @@ func TestLogger(t *testing.T) {
 				sessionId,
 				traceId,
 			)
-			var prettyJsonStringMessage bytes.Buffer
-			if err := json.Indent(&prettyJsonStringMessage, []byte(jsonStringMessage), "", "    "); err != nil {
-				assert.Nil(t, err, fmt.Sprintf("Expected no error, got: '%s'", err))
-			}
-			expectedMessage := prettyJsonStringMessage.String()
-			loggedMessage, err := logger.EmergencyEvent(message, context, globalEventName)
+			expectedMessage, err := utils.IndentJsonString(jsonStringMessage)
+			assert.Nil(t, err, fmt.Sprintf("Expected no error, got: '%s'", err))
+			logMessageOptions := Logger.LogMessageOptions{GlobalEventName: globalEventName, Context: context}
+			loggedMessage, err := logger.EmergencyWithOptions(message, logMessageOptions)
 			assert.Nil(t, err, fmt.Sprintf("Expected no error, got: '%s'", err))
 			assert.Equal(t, expectedMessage, loggedMessage)
 		})
+	})
+
+	t.Run("EmergencyEvent", func(t *testing.T) {
+
 	})
 
 	t.Run("Error", func(t *testing.T) {
