@@ -38,7 +38,7 @@ type LogMessage struct {
 
 type LogMessageOptions struct {
 	GlobalEventName string      `json:"global_event_name,omitempty"`
-	Context         interface{} `json:"context"`
+	Context         interface{} `json:"context,omitempty"`
 }
 
 func (logger Logger) formatMessage(
