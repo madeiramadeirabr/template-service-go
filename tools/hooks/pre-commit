@@ -6,8 +6,8 @@ if [[ "$STAGED_GO_FILES" = "" ]]; then
   exit 0
 fi
 
-GOLINT=$GOPATH/bin/golint
-GOIMPORTS=$GOPATH/bin/goimports
+GOLINT=$HOME/go/bin/golint
+GOIMPORTS=$HOME/go/bin/goimports
 
 # Check for golint
 if [[ ! -x "$GOLINT" ]]; then
