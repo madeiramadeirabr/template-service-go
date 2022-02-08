@@ -1,4 +1,4 @@
-package healthCheckRouter
+package healthcheckrouter
 
 import (
 	healthCheckHandler "go-service-template/internal/health-check/handlers"

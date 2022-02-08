@@ -1,6 +1,8 @@
-package healthCheck_test
+package healthcheck_test
 
 import (
+	"go-service-template/pkg/logger"
+	"go-service-template/pkg/utils"
 	"testing"
 
 	healthCheckHandler "go-service-template/internal/health-check/handlers"
@@ -9,9 +11,14 @@ import (
 )
 
 func TestHealthCheck(t *testing.T) {
+	Logger := logger.Logger{
+		ServiceName:              "Foo",
+		Clock:                    utils.ClockMock{},
+		IsDevelopmentEnvironment: true,
+	}
 	t.Run("GetStatus", func(t *testing.T) {
 		t.Run("It should match status message", func(t *testing.T) {
-			status := healthCheckHandler.GetStatus()
+			status := healthCheckHandler.GetStatus(&Logger)
 			expected := map[string]interface{}{
 				"status": "OK",
 			}

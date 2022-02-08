@@ -2,9 +2,10 @@ package configuration
 
 import (
 	"fmt"
-	"github.com/thoas/go-funk"
 	"os"
 	"strconv"
+
+	"github.com/thoas/go-funk"
 
 	validation "github.com/go-ozzo/ozzo-validation"
 	"github.com/joho/godotenv"
