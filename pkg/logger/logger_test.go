@@ -56,8 +56,10 @@ func TestLogger(t *testing.T) {
 			)
 			expectedMessage, err := utils.IndentJsonString(jsonStringMessage)
 			assert.Nil(t, err, fmt.Sprintf("Expected no error, got: '%s'", err))
-			logMessageOptions := Logger.LogMessageOptions{GlobalEventName: globalEventName, Context: context}
-			loggedMessage, err := logger.EmergencyWithOptions(message, logMessageOptions)
+			loggedMessage, err := logger.EmergencyWithOptions(
+				message,
+				Logger.LogMessageOptions{GlobalEventName: globalEventName, Context: context},
+			)
 			assert.Nil(t, err, fmt.Sprintf("Expected no error, got: '%s'", err))
 			assert.Equal(t, expectedMessage, loggedMessage)
 		})
