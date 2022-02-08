@@ -41,7 +41,7 @@ $ ./setup.sh
 $ go mod download
 $ go run ./cmd/SERVICE_NAME/main.go
 
-#eg:
+# eg:
 $ go run ./cmd/go_service_template/main.go
 ```
 
@@ -71,8 +71,16 @@ $ gotestsum --format testname
 ```bash
 $ docker build \
     --target release \
-    -t SERVICE-NAME:VERSION \
-    -f cmd/SERVICE_NAME/Dockerfile .
+    --build-arg SERVICE_PATH=_SERVICE_NAME_ \
+    -t _SERVICE_NAME_:VERSION \
+    -f docker/Dockerfile .
+
+# eg:
+$ docker build \
+    --target release \
+    --build-arg SERVICE_PATH=go_service_template \
+    -t go-service-template-production:latest \
+    -f docker/Dockerfile .
 ```
 ---
 Squad Core APIs
