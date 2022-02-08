@@ -4,7 +4,7 @@ services:
   # Application
   go-service-template:
     extends:
-      file: docker/common-services.yml
+      file: compose-common.yml
       service: base-build
     build:
       args:
