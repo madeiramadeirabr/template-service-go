@@ -30,7 +30,7 @@ do
 
   # Run golint on the staged file
   printf "\t\033[32m"
-  $GOLINT $FILE | grep -v "should have comment"
+  $GOLINT $FILE | egrep -v -w "should have comment|lint suggestions; failing"
   printf "\033[0m"
 
   # Run govet on the staged file and check the exit status
