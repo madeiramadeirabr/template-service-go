@@ -1,0 +1,16 @@
+#!/bin/sh
+PASS=true
+for FILE in $STAGED_GO_FILES
+do
+    golint "-set_exit_status" $FILE
+    if [[ $? == 1 ]]; then
+        PASS=false
+    fi
+done
+if ! PASS; then
+    printf "COMMIT FAILED\n"
+    exit 1
+else
+    printf "COMMIT SUCCEEDED\n"
+fi
+exit 0
