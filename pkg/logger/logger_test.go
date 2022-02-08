@@ -10,13 +10,13 @@ import (
 )
 
 func TestLogger(t *testing.T) {
-	traceId := "c29uZWdhw6fDo28gw6kgbGVnw610aW1hIGRlZmVzYQo="
-	sessionId := "aW1wb3N0byDDqSByb3Vibwo"
+	traceID := "c29uZWdhw6fDo28gw6kgbGVnw610aW1hIGRlZmVzYQo="
+	sessionID := "aW1wb3N0byDDqSByb3Vibwo"
 	serviceName := "go-service-template"
 	dateFixture := utils.ClockMock{}.GetCurrentTimestamp()
 	logger := Logger.Logger{
-		TraceID:     traceId,
-		SessionID:   sessionId,
+		TraceID:     traceID,
+		SessionID:   sessionID,
 		ServiceName: serviceName,
 		Clock:       utils.ClockMock{},
 	}
@@ -30,8 +30,8 @@ func TestLogger(t *testing.T) {
 				Logger.LogLevelEmergency,
 				message,
 				serviceName,
-				sessionId,
-				traceId,
+				sessionID,
+				traceID,
 			)
 			expectedMessage, err := utils.IndentJsonString(jsonStringMessage)
 			assert.Nil(t, err, fmt.Sprintf("Expected no error, got: '%s'", err))
@@ -52,8 +52,8 @@ func TestLogger(t *testing.T) {
 				fmt.Sprintf("%s", context),
 				message,
 				serviceName,
-				sessionId,
-				traceId,
+				sessionID,
+				traceID,
 			)
 			expectedMessage, err := utils.IndentJsonString(jsonStringMessage)
 			assert.Nil(t, err, fmt.Sprintf("Expected no error, got: '%s'", err))
