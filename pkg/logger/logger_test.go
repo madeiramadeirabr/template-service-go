@@ -80,7 +80,7 @@ func TestLogger(t *testing.T) {
 		// TODO
 	})
 
-	t.Run("LogLevelDebug", func(t *testing.T) {
+	t.Run("Debug", func(t *testing.T) {
 		// TODO
 	})
 
