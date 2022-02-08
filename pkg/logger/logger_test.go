@@ -1,4 +1,4 @@
-package Logger_test
+package logger_test
 
 import (
 	"fmt"
@@ -14,8 +14,8 @@ func TestLogger(t *testing.T) {
 	serviceName := "go-service-template"
 	dateFixture := utils.ClockMock{}.GetCurrentTimestamp()
 	logger := Logger.Logger{
-		TraceId:     traceId,
-		SessionId:   sessionId,
+		TraceID:     traceId,
+		SessionID:   sessionId,
 		ServiceName: serviceName,
 		Clock:       utils.ClockMock{},
 	}

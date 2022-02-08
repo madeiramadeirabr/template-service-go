@@ -29,7 +29,7 @@ do
   $GOIMPORTS -w $FILE
 
   # Run golint on the staged file and check the exit status
-  $GOLINT "-set_exit_status" $FILE
+  $GOLINT "-set_exit_status" $FILE | grep -v "should have comment or be unexported"
   if [[ $? == 1 ]]; then
     printf "\t\033[31mgolint $FILE\033[0m \033[0;30m\033[41mFAILURE!\033[0m\n"
     PASS=false

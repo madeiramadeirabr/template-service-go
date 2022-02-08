@@ -1,4 +1,4 @@
-package Logger
+package logger
 
 import (
 	"encoding/json"
@@ -8,9 +8,9 @@ import (
 )
 
 type Logger struct {
-	SessionId   string
+	SessionID   string
 	ServiceName string
-	TraceId     string
+	TraceID     string
 	Clock       utils.ClockInterface
 }
 
@@ -32,8 +32,8 @@ type LogMessage struct {
 	Context              string   `json:"context,omitempty"`
 	Message              string   `json:"message"`
 	ServiceName          string   `json:"service_name"`
-	SessionId            string   `json:"session_id"`
-	TraceId              string   `json:"trace_id"`
+	SessionID            string   `json:"session_id"`
+	TraceID              string   `json:"trace_id"`
 }
 
 type LogMessageOptions struct {
@@ -52,8 +52,8 @@ func (logger Logger) formatMessage(
 		Level:                level,
 		Message:              message,
 		ServiceName:          logger.ServiceName,
-		SessionId:            logger.SessionId,
-		TraceId:              logger.TraceId,
+		SessionID:            logger.SessionID,
+		TraceID:              logger.TraceID,
 	}
 	if logMessageOptions.GlobalEventName != "" {
 		logMessage.GlobalEventName = logMessageOptions.GlobalEventName
