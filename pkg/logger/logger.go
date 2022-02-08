@@ -74,7 +74,6 @@ func (logger Logger) Emergency(message string) (string, error) {
 	return logger.EmergencyWithOptions(message, LogMessageOptions{})
 }
 
-// EmergencyWithOptions TODO: eventName should be a fixed enum with the available event topics
 func (logger Logger) EmergencyWithOptions(message string, logMessageOptions LogMessageOptions) (string, error) {
 	formattedMessage, err := logger.formatMessage(
 		message,
