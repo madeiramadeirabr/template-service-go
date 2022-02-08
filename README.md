@@ -32,7 +32,7 @@ MadeiraMadeira boilerplate project to build scalable, testable and high performa
 #### Docker setup
 ```bash
 $ ./setup.sh
-$ docker-compose -f docker-compose.dev.yml up
+$ docker-compose -f docker/compose.yml up
 ```
 
 #### Local setup
