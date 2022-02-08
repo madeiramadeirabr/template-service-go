@@ -10,7 +10,7 @@ import (
 type Logger struct {
 	SessionID   string
 	ServiceName string
-	TraceId     string
+	TraceID     string
 	Clock       utils.ClockInterface
 }
 
@@ -53,7 +53,7 @@ func (logger Logger) formatMessage(
 		Message:              message,
 		ServiceName:          logger.ServiceName,
 		SessionID:            logger.SessionID,
-		TraceID:              logger.TraceId,
+		TraceID:              logger.TraceID,
 	}
 	if logMessageOptions.GlobalEventName != "" {
 		logMessage.GlobalEventName = logMessageOptions.GlobalEventName
