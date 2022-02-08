@@ -7,7 +7,7 @@ do
         PASS=false
     fi
 done
-if ! PASS; then
+if ! $PASS; then
     printf "COMMIT FAILED\n"
     exit 1
 else
