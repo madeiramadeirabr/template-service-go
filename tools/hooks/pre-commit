@@ -28,7 +28,7 @@ do
   # Run goimports on the staged file
   $GOIMPORTS -w $FILE
 
-  # Run golint on the staged file and check the exit status
+  # Run golint on the staged file
   $GOLINT "-set_exit_status" $FILE | grep -v "should have comment"
 
   # Run govet on the staged file and check the exit status
