@@ -1,4 +1,4 @@
-package Logger
+package logger
 
 import (
 	"encoding/json"
@@ -8,9 +8,9 @@ import (
 )
 
 type Logger struct {
-	SessionId   string
+	SessionID   string
 	ServiceName string
-	TraceId     string
+	TraceID     string
 	Clock       utils.ClockInterface
 }
 
@@ -32,8 +32,8 @@ type LogMessage struct {
 	Context              string   `json:"context,omitempty"`
 	Message              string   `json:"message"`
 	ServiceName          string   `json:"service_name"`
-	SessionId            string   `json:"session_id"`
-	TraceId              string   `json:"trace_id"`
+	SessionID            string   `json:"session_id"`
+	TraceID              string   `json:"trace_id"`
 }
 
 type LogMessageOptions struct {
@@ -52,8 +52,8 @@ func (logger Logger) formatMessage(
 		Level:                level,
 		Message:              message,
 		ServiceName:          logger.ServiceName,
-		SessionId:            logger.SessionId,
-		TraceId:              logger.TraceId,
+		SessionID:            logger.SessionID,
+		TraceID:              logger.TraceID,
 	}
 	if logMessageOptions.GlobalEventName != "" {
 		logMessage.GlobalEventName = logMessageOptions.GlobalEventName
@@ -70,14 +70,10 @@ func (logger Logger) formatMessage(
 	return string(formattedLogMessage), nil
 }
 
-func (logger Logger) Emergency(message string) (string, error) {
-	return logger.EmergencyWithOptions(message, LogMessageOptions{})
-}
-
-func (logger Logger) EmergencyWithOptions(message string, logMessageOptions LogMessageOptions) (string, error) {
+func (logger Logger) Log(message string, logLevel LogLevel, logMessageOptions LogMessageOptions) (string, error) {
 	formattedMessage, err := logger.formatMessage(
 		message,
-		LogLevelEmergency,
+		logLevel,
 		logger.Clock.GetCurrentTimestamp(),
 		logMessageOptions,
 	)
@@ -88,22 +84,50 @@ func (logger Logger) EmergencyWithOptions(message string, logMessageOptions LogM
 	return formattedMessage, nil
 }
 
-func (logger Logger) Error(message string) {
-	// TODO
+func (logger Logger) Emergency(message string) (string, error) {
+	return logger.Log(message, LogLevelEmergency, LogMessageOptions{})
 }
 
-func (logger Logger) Warn(message string) {
-	// TODO
+func (logger Logger) EmergencyWithOptions(message string, logMessageOptions LogMessageOptions) (string, error) {
+	return logger.Log(message, LogLevelEmergency, logMessageOptions)
 }
 
-func (logger Logger) Info(message string) {
-	// TODO
+func (logger Logger) Error(message string) (string, error) {
+	return logger.Log(message, LogLevelError, LogMessageOptions{})
 }
 
-func (logger Logger) Debug(message string) {
-	// TODO: feature toggle
+func (logger Logger) ErrorWithOptions(message string, logMessageOptions LogMessageOptions) (string, error) {
+	return logger.Log(message, LogLevelError, logMessageOptions)
 }
 
-func (logger Logger) Trace(message string) {
-	// TODO: feature toggle
+func (logger Logger) Warn(message string) (string, error) {
+	return logger.Log(message, LogLevelWarn, LogMessageOptions{})
+}
+
+func (logger Logger) WarnWithOptions(message string, logMessageOptions LogMessageOptions) (string, error) {
+	return logger.Log(message, LogLevelWarn, logMessageOptions)
+}
+
+func (logger Logger) Info(message string) (string, error) {
+	return logger.Log(message, LogLevelInfo, LogMessageOptions{})
+}
+
+func (logger Logger) InfoWithOptions(message string, logMessageOptions LogMessageOptions) (string, error) {
+	return logger.Log(message, LogLevelInfo, logMessageOptions)
+}
+
+func (logger Logger) Debug(message string) (string, error) {
+	return logger.Log(message, LogLevelDebug, LogMessageOptions{})
+}
+
+func (logger Logger) DebugWithOptions(message string, logMessageOptions LogMessageOptions) (string, error) {
+	return logger.Log(message, LogLevelDebug, logMessageOptions)
+}
+
+func (logger Logger) Trace(message string) (string, error) {
+	return logger.Log(message, LogLevelTrace, LogMessageOptions{})
+}
+
+func (logger Logger) TraceWithOptions(message string, logMessageOptions LogMessageOptions) (string, error) {
+	return logger.Log(message, LogLevelTrace, logMessageOptions)
 }
