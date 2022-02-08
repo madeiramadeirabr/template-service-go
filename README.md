@@ -29,13 +29,13 @@ MadeiraMadeira boilerplate project to build scalable, testable and high performa
 
 ### Development
 
-#### Using Docker
+#### Docker setup
 ```bash
 $ ./setup.sh
 $ docker-compose -f docker-compose.dev.yml up
 ```
 
-#### Without Docker
+#### Local setup
 ```bash
 $ ./setup.sh
 $ go mod download
