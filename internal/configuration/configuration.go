@@ -5,14 +5,39 @@ import (
 	"os"
 	"strconv"
 
+	"github.com/thoas/go-funk"
+
 	validation "github.com/go-ozzo/ozzo-validation"
 	"github.com/joho/godotenv"
+)
+
+type ApplicationEnvEnum string
+
+const (
+	Development ApplicationEnvEnum = "DEVELOPMENT"
+	Test        ApplicationEnvEnum = "TEST"
+	Production  ApplicationEnvEnum = "PRODUCTION"
+	Staging     ApplicationEnvEnum = "STAGING"
 )
 
 type AppConfig struct {
 	Port           string `env:"PORT"`
 	ApplicationEnv string `env:"APPLICATION_ENV"`
 	IsTesting      bool   `env:"TESTING"`
+	ServiceName    string `env:"SERVICE_NAME"`
+}
+
+func (appConfig AppConfig) IsDevelopmentEnvironment() bool {
+	developmentEnvironments := []ApplicationEnvEnum{Test, Development, Staging}
+	return funk.Contains(developmentEnvironments, ApplicationEnvEnum(appConfig.ApplicationEnv))
+}
+
+func (appConfig AppConfig) Validate() error {
+	return validation.ValidateStruct(
+		&appConfig,
+		validation.Field(&appConfig.Port, validation.Required),
+		validation.Field(&appConfig.ApplicationEnv, validation.Required),
+	)
 }
 
 func GetEnvString(key string) string {
@@ -31,14 +56,6 @@ func GetEnvBool(key string) bool {
 	return false
 }
 
-func (c AppConfig) Validate() error {
-	return validation.ValidateStruct(
-		&c,
-		validation.Field(&c.Port, validation.Required),
-		validation.Field(&c.ApplicationEnv, validation.Required),
-	)
-}
-
 func Load() (*AppConfig, error) {
 	config := AppConfig{}
 	err := godotenv.Load()
@@ -48,5 +65,6 @@ func Load() (*AppConfig, error) {
 	config.Port = GetEnvString("PORT")
 	config.ApplicationEnv = GetEnvString("APPLICATION_ENV")
 	config.IsTesting = GetEnvBool("TESTING")
+	config.ServiceName = GetEnvString("SERVICE_NAME")
 	return &config, config.Validate()
 }
