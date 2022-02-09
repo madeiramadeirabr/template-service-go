@@ -15,8 +15,8 @@ func GetStatus(logger *logger.Logger, config *configuration.AppConfig) map[strin
 	}
 }
 
-func Alive() map[string]interface{} {
-	return map[string]interface{}{
+func Alive() map[string]bool {
+	return map[string]bool{
 		"alive": true,
 	}
 }
