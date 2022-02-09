@@ -1,7 +1,22 @@
-package healthCheck
+package healthcheck
 
-func GetStatus() map[string]interface{} {
+import (
+	"go-service-template/internal/configuration"
+	"go-service-template/pkg/logger"
+)
+
+// GetStatus add your health check logic here
+func GetStatus(logger *logger.Logger, config *configuration.AppConfig) map[string]interface{} {
+	logger.Info("Executing Health Check...")
 	return map[string]interface{}{
-		"status": "OK",
+		"serviceName": config.ServiceName,
+		"status":      "OK",
+		"environment": config.ApplicationEnv,
+	}
+}
+
+func Alive() map[string]bool {
+	return map[string]bool{
+		"alive": true,
 	}
 }

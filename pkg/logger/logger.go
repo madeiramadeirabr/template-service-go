@@ -4,51 +4,63 @@ import (
 	"encoding/json"
 	"fmt"
 	"go-service-template/pkg/utils"
-	"time"
 )
 
-type Logger struct {
-	SessionID   string
-	ServiceName string
-	TraceID     string
-	Clock       utils.ClockInterface
-}
-
-type LogLevel string
+type LogLevelEnum string
 
 const (
-	LogLevelEmergency LogLevel = "EMERGENCY"
-	LogLevelError     LogLevel = "ERROR"
-	LogLevelWarn      LogLevel = "WARN"
-	LogLevelInfo      LogLevel = "INFO"
-	LogLevelDebug     LogLevel = "DEBUG"
-	LogLevelTrace     LogLevel = "TRACE"
+	LogLevelEmergency LogLevelEnum = "EMERGENCY"
+	LogLevelError     LogLevelEnum = "ERROR"
+	LogLevelWarn      LogLevelEnum = "WARN"
+	LogLevelInfo      LogLevelEnum = "INFO"
+	LogLevelDebug     LogLevelEnum = "DEBUG"
+	LogLevelTrace     LogLevelEnum = "TRACE"
 )
-
-type LogMessage struct {
-	GlobalEventTimestamp string   `json:"global_event_timestamp"`
-	GlobalEventName      string   `json:"global_event_name,omitempty"`
-	Level                LogLevel `json:"level"`
-	Context              string   `json:"context,omitempty"`
-	Message              string   `json:"message"`
-	ServiceName          string   `json:"service_name"`
-	SessionID            string   `json:"session_id"`
-	TraceID              string   `json:"trace_id"`
-}
 
 type LogMessageOptions struct {
 	GlobalEventName string      `json:"global_event_name,omitempty"`
 	Context         interface{} `json:"context,omitempty"`
 }
 
-func (logger Logger) formatMessage(
+type LogMessage struct {
+	GlobalEventTimestamp string       `json:"global_event_timestamp"`
+	GlobalEventName      string       `json:"global_event_name,omitempty"`
+	Level                LogLevelEnum `json:"level"`
+	Context              string       `json:"context,omitempty"`
+	Message              string       `json:"message"`
+	ServiceName          string       `json:"service_name"`
+	SessionID            string       `json:"session_id,omitempty"`
+	TraceID              string       `json:"trace_id,omitempty"`
+}
+
+// Logger TODO: format context to json when it's a struct
+type Logger struct {
+	SessionID                string
+	ServiceName              string
+	TraceID                  string
+	Clock                    utils.ClockInterface
+	IsDevelopmentEnvironment bool
+}
+
+func New(
+	serviceName string,
+	clock utils.ClockInterface,
+	isDevelopmentEnvironment bool,
+) *Logger {
+	return &Logger{
+		ServiceName:              serviceName,
+		Clock:                    clock,
+		IsDevelopmentEnvironment: isDevelopmentEnvironment,
+	}
+}
+
+func (logger Logger) FormatMessage(
 	message string,
-	level LogLevel,
-	timestamp time.Time,
+	level LogLevelEnum,
 	logMessageOptions LogMessageOptions,
 ) (string, error) {
 	logMessage := LogMessage{
-		GlobalEventTimestamp: timestamp.String(),
+		GlobalEventTimestamp: logger.Clock.GetCurrentTimestamp().String(),
 		Level:                level,
 		Message:              message,
 		ServiceName:          logger.ServiceName,
@@ -70,64 +82,74 @@ func (logger Logger) formatMessage(
 	return string(formattedLogMessage), nil
 }
 
-func (logger Logger) Log(message string, logLevel LogLevel, logMessageOptions LogMessageOptions) (string, error) {
-	formattedMessage, err := logger.formatMessage(
+func (logger Logger) Log(message string, logLevel LogLevelEnum, logMessageOptions LogMessageOptions) {
+	formattedMessage, err := logger.FormatMessage(
 		message,
 		logLevel,
-		logger.Clock.GetCurrentTimestamp(),
 		logMessageOptions,
 	)
 	if err != nil {
-		return "", err
+		fmt.Println(err)
 	}
 	fmt.Print(formattedMessage)
-	return formattedMessage, nil
 }
 
-func (logger Logger) Emergency(message string) (string, error) {
-	return logger.Log(message, LogLevelEmergency, LogMessageOptions{})
+func (logger Logger) Emergency(message string) {
+	logger.Log(message, LogLevelEmergency, LogMessageOptions{})
 }
 
-func (logger Logger) EmergencyWithOptions(message string, logMessageOptions LogMessageOptions) (string, error) {
-	return logger.Log(message, LogLevelEmergency, logMessageOptions)
+func (logger Logger) EmergencyWithOptions(message string, logMessageOptions LogMessageOptions) {
+	logger.Log(message, LogLevelEmergency, logMessageOptions)
 }
 
-func (logger Logger) Error(message string) (string, error) {
-	return logger.Log(message, LogLevelError, LogMessageOptions{})
+func (logger Logger) Error(message string) {
+	logger.Log(message, LogLevelError, LogMessageOptions{})
 }
 
-func (logger Logger) ErrorWithOptions(message string, logMessageOptions LogMessageOptions) (string, error) {
-	return logger.Log(message, LogLevelError, logMessageOptions)
+func (logger Logger) ErrorWithOptions(message string, logMessageOptions LogMessageOptions) {
+	logger.Log(message, LogLevelError, logMessageOptions)
 }
 
-func (logger Logger) Warn(message string) (string, error) {
-	return logger.Log(message, LogLevelWarn, LogMessageOptions{})
+func (logger Logger) Warn(message string) {
+	logger.Log(message, LogLevelWarn, LogMessageOptions{})
 }
 
-func (logger Logger) WarnWithOptions(message string, logMessageOptions LogMessageOptions) (string, error) {
-	return logger.Log(message, LogLevelWarn, logMessageOptions)
+func (logger Logger) WarnWithOptions(message string, logMessageOptions LogMessageOptions) {
+	logger.Log(message, LogLevelWarn, logMessageOptions)
 }
 
-func (logger Logger) Info(message string) (string, error) {
-	return logger.Log(message, LogLevelInfo, LogMessageOptions{})
+func (logger Logger) Info(message string) {
+	logger.Log(message, LogLevelInfo, LogMessageOptions{})
 }
 
-func (logger Logger) InfoWithOptions(message string, logMessageOptions LogMessageOptions) (string, error) {
-	return logger.Log(message, LogLevelInfo, logMessageOptions)
+func (logger Logger) InfoWithOptions(message string, logMessageOptions LogMessageOptions) {
+	logger.Log(message, LogLevelInfo, logMessageOptions)
 }
 
-func (logger Logger) Debug(message string) (string, error) {
-	return logger.Log(message, LogLevelDebug, LogMessageOptions{})
+func (logger Logger) Debug(message string) {
+	if !logger.IsDevelopmentEnvironment {
+		return
+	}
+	logger.Log(message, LogLevelDebug, LogMessageOptions{})
 }
 
-func (logger Logger) DebugWithOptions(message string, logMessageOptions LogMessageOptions) (string, error) {
-	return logger.Log(message, LogLevelDebug, logMessageOptions)
+func (logger Logger) DebugWithOptions(message string, logMessageOptions LogMessageOptions) {
+	if !logger.IsDevelopmentEnvironment {
+		return
+	}
+	logger.Log(message, LogLevelDebug, logMessageOptions)
 }
 
-func (logger Logger) Trace(message string) (string, error) {
-	return logger.Log(message, LogLevelTrace, LogMessageOptions{})
+func (logger Logger) Trace(message string) {
+	if !logger.IsDevelopmentEnvironment {
+		return
+	}
+	logger.Log(message, LogLevelTrace, LogMessageOptions{})
 }
 
-func (logger Logger) TraceWithOptions(message string, logMessageOptions LogMessageOptions) (string, error) {
-	return logger.Log(message, LogLevelTrace, logMessageOptions)
+func (logger Logger) TraceWithOptions(message string, logMessageOptions LogMessageOptions) {
+	if !logger.IsDevelopmentEnvironment {
+		return
+	}
+	logger.Log(message, LogLevelTrace, logMessageOptions)
 }

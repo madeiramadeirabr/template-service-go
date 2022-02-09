@@ -1,11 +1,11 @@
 package main
 
 import (
-	"fmt"
 	"go-service-template/internal/configuration"
-	healthCheckRouter "go-service-template/internal/health-check/routes"
-
+	healthcheckrouter "go-service-template/internal/health-check/routes"
+	Logger "go-service-template/pkg/logger"
 	"go-service-template/pkg/utils"
+
 	"log"
 
 	"github.com/gofiber/fiber/v2"
@@ -14,11 +14,13 @@ import (
 func main() {
 	config, err := configuration.Load()
 	utils.Fck(err)
-
+	logger := Logger.New(
+		config.ServiceName,
+		utils.Clock{},
+		config.IsDevelopmentEnvironment(),
+	)
 	app := fiber.New()
-	healthCheckRouter.RegisterRoutes(app)
-
-	fmt.Println("🧜‍ Core APIs Go Service Template Listening on port", config.Port)
-
+	healthcheckrouter.RegisterRoutes(app, logger, config)
+	logger.Info("\"🧜‍ Core APIs Go Service Template Listening on port: " + config.Port)
 	log.Fatal(app.Listen(":" + config.Port))
 }
