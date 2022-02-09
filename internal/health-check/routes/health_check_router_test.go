@@ -2,6 +2,7 @@ package healthcheckrouter_test
 
 import (
 	"fmt"
+	"go-service-template/internal/configuration"
 	healthCheckRouter "go-service-template/internal/health-check/routes"
 	"go-service-template/pkg/logger"
 	"go-service-template/pkg/utils"
@@ -19,9 +20,9 @@ func TestHealthCheckRouter(t *testing.T) {
 		utils.ClockMock{},
 		true,
 	)
-
+	config, _ := configuration.Load()
 	app := fiber.New()
-	healthCheckRouter.RegisterRoutes(app, Logger)
+	healthCheckRouter.RegisterRoutes(app, Logger, config)
 
 	t.Run("Health check handler", func(t *testing.T) {
 		t.Run("It should return status 200", func(t *testing.T) {
