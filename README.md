@@ -2,6 +2,14 @@
 
 MadeiraMadeira boilerplate project to build scalable, testable and high performance Go microservices.
 
+## Table of Contents
+- [Stack](#stack)
+- [Features](#features)
+- [Hands On](#hands-on)
+    - [Development](#development)
+    - [Test](#test)
+    - [Release](#release)
+
 ## Stack
 - Go
 - Docker
@@ -15,35 +23,29 @@ MadeiraMadeira boilerplate project to build scalable, testable and high performa
 - [soon] `logger`: easily manage application logs following the [MMRFC1](https://madeiramadeira.atlassian.net/wiki/spaces/CAR/pages/2317942893/MMRFC+1+-+Log) standards;
 - Docker infrastructure with Docker Compose.
 
-## Local development with Docker
 
-### Setup
+
+## Hands On
+
+### Development
+
+#### Docker setup
 ```bash
 $ ./setup.sh
+$ docker-compose -f docker/compose.yml up
 ```
 
-### Running the app
-
-```bash
-$ docker-compose -f docker-compose.dev.yml up
-```
-
-## Local development
-
-### Setup
+#### Local setup
 ```bash
 $ ./setup.sh
 $ go mod download
-```
+$ go run ./cmd/SERVICE_NAME/main.go
 
-### Running the app
-
-```bash
+# eg:
 $ go run ./cmd/go_service_template/main.go
 ```
 
-## Test
-
+### Test
 ```bash
 # unit tests
 $ go test ./...
@@ -53,19 +55,32 @@ $ go test ./...
 
 # test coverage
 [soon]
-``` 
-
-### Improve tests output
+```
+#### Improve tests output
 
 To see a more friendly test output, install `gotestsum` globally by running
 ```bash
 $ go install gotest.tools/gotestsum@latest
 ```
-And execute as
+And execute in project root directory.
 ```bash
 $ gotestsum --format testname 
 ```
-at the project root directory.
 
+### Release
+```bash
+$ docker build \
+    --target release \
+    --build-arg SERVICE_PATH=_SERVICE_NAME_ \
+    -t _SERVICE_NAME_:VERSION \
+    -f docker/Dockerfile .
+
+# eg:
+$ docker build \
+    --target release \
+    --build-arg SERVICE_PATH=go_service_template \
+    -t go-service-template-production:latest \
+    -f docker/Dockerfile .
+```
 ---
 Squad Core APIs
