@@ -2,6 +2,15 @@
 
 MadeiraMadeira boilerplate project to build scalable, testable and high performance Go microservices.
 
+## Table of Contents
+- [Stack](#stack)
+- [Features](#features)
+- [Getting start](#getting-started-with-boilerplate)
+- [Hands On](#hands-on)
+    - [Development](#development)
+    - [Test](#test)
+    - [Release](#release)
+
 ## Stack
 - [Go](https://go.dev)
 - [Docker](https://www.docker.com)
@@ -14,58 +23,6 @@ MadeiraMadeira boilerplate project to build scalable, testable and high performa
 - `logger`: easily manage application logs following the [MMRFC1](https://madeiramadeira.atlassian.net/wiki/spaces/CAR/pages/2317942893/MMRFC+1+-+Log) standards;
 - Docker infrastructure with Docker Compose.
 
-## Local development with Docker
-
-### Setup
-```bash
-$ ./setup.sh
-```
-
-### Running the app
-
-```bash
-$ docker-compose -f docker-compose.dev.yml up
-```
-
-## Local development
-
-### Setup
-```bash
-$ ./setup.sh
-$ go mod download
-```
-
-### Running the app
-
-```bash
-$ go run ./cmd/go_service_template/main.go
-```
-
-## Test
-
-```bash
-# unit tests
-$ go test ./...
-
-# e2e tests
-[soon]
-
-# test coverage
-[soon]
-``` 
-
-### Improve tests output
-
-To see a more friendly test output, install [gotestsum](https://github.com/gotestyourself/gotestsum) globally by running
-```bash
-$ go install gotest.tools/gotestsum@latest
-```
-And execute as
-```bash
-$ gotestsum --format testname 
-```
-at the project root directory.
-
 
 ## Getting started with boilerplate
 
@@ -76,7 +33,65 @@ $ git init
 $ git remote add origin https://github.com/{user}/{repo}.git
 ```
 
-Hint: use `$ git remote -v` to verify new remote
+> Hint: use `$ git remote -v` to verify new remote
 
+
+## Hands On
+
+### Development
+
+#### Docker setup
+```bash
+$ ./setup.sh
+$ docker-compose -f docker/compose.yml up
+```
+
+#### Local setup
+```bash
+$ ./setup.sh
+$ go mod download
+$ go run ./cmd/SERVICE_NAME/main.go
+
+# eg:
+$ go run ./cmd/go_service_template/main.go
+```
+
+### Test
+```bash
+# unit tests
+$ go test ./...
+
+# e2e tests
+[soon]
+
+# test coverage
+[soon]
+```
+#### Improve tests output
+
+To see a more friendly test output, install [gotestsum](https://github.com/gotestyourself/gotestsum) globally by running
+```bash
+$ go install gotest.tools/gotestsum@latest
+```
+And execute in project root directory.
+```bash
+$ gotestsum --format testname 
+```
+
+### Release
+```bash
+$ docker build \
+    --target release \
+    --build-arg SERVICE_PATH=_SERVICE_NAME_ \
+    -t _SERVICE_NAME_:VERSION \
+    -f docker/Dockerfile .
+
+# eg:
+$ docker build \
+    --target release \
+    --build-arg SERVICE_PATH=go_service_template \
+    -t go-service-template-production:latest \
+    -f docker/Dockerfile .
+```
 ---
 Squad Core APIs • [MadeiraMadeira](https://www.madeiramadeira.com.br)

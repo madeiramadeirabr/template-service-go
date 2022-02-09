@@ -1,0 +1,13 @@
+version: "3.7"
+
+services:
+  base-build:
+    build:
+      context: ../.
+      dockerfile: ./docker/Dockerfile
+      target: development
+      args:
+        - SERVICE_PATH=
+    volumes:
+      - ../.:/app
+    

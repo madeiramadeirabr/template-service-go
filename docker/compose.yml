@@ -1,0 +1,13 @@
+version: "3.7"
+
+services:
+  # Application
+  go-service-template:
+    extends:
+      file: compose-common.yml
+      service: base-build
+    build:
+      args:
+        - SERVICE_PATH=go_service_template
+    ports:
+      - 8080:8080
