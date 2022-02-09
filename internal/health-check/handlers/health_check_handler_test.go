@@ -11,14 +11,14 @@ import (
 )
 
 func TestHealthCheck(t *testing.T) {
-	Logger := logger.Logger{
-		ServiceName:              "Foo",
-		Clock:                    utils.ClockMock{},
-		IsDevelopmentEnvironment: true,
-	}
+	Logger := logger.New(
+		"Foo",
+		utils.ClockMock{},
+		true,
+	)
 	t.Run("GetStatus", func(t *testing.T) {
 		t.Run("It should match status message", func(t *testing.T) {
-			status := healthCheckHandler.GetStatus(&Logger)
+			status := healthCheckHandler.GetStatus(Logger)
 			expected := map[string]interface{}{
 				"status": "OK",
 			}

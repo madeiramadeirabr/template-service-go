@@ -14,13 +14,14 @@ import (
 
 func TestHealthCheckRouter(t *testing.T) {
 
-	Logger := logger.Logger{
-		ServiceName:              "Foo",
-		Clock:                    utils.ClockMock{},
-		IsDevelopmentEnvironment: true,
-	}
+	Logger := logger.New(
+		"Foo",
+		utils.ClockMock{},
+		true,
+	)
+
 	app := fiber.New()
-	healthCheckRouter.RegisterRoutes(app, &Logger)
+	healthCheckRouter.RegisterRoutes(app, Logger)
 
 	t.Run("Health check handler", func(t *testing.T) {
 		t.Run("It should return status 200", func(t *testing.T) {
