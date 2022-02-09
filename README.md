@@ -5,7 +5,7 @@ MadeiraMadeira boilerplate project to build scalable, testable and high performa
 ## Table of Contents
 - [Stack](#stack)
 - [Features](#features)
-- [Getting start](#getting-started-with-boilerplate)
+- [Getting Started](#getting-started-with-boilerplate)
 - [Hands On](#hands-on)
     - [Development](#development)
     - [Test](#test)
