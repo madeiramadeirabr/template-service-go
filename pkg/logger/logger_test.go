@@ -5,6 +5,7 @@ import (
 	Logger "go-service-template/pkg/logger"
 	"go-service-template/pkg/utils"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -27,7 +28,7 @@ func TestLogger(t *testing.T) {
 		t.Run("Should return a log message correctly formatted without optional fields", func(t *testing.T) {
 			jsonStringMessage := fmt.Sprintf(
 				`{"global_event_timestamp":"%s","level":"%s","message":"%s","service_name":"%s","session_id":"%s","trace_id":"%s"}`,
-				dateFixture.String(),
+				dateFixture.Format(time.RFC3339),
 				Logger.LogLevelEmergency,
 				message,
 				serviceName,
@@ -47,7 +48,7 @@ func TestLogger(t *testing.T) {
 			}
 			jsonStringMessage := fmt.Sprintf(
 				`{"global_event_timestamp":"%s","global_event_name":"%s","level":"%s","context":"%s","message":"%s","service_name":"%s","session_id":"%s","trace_id":"%s"}`,
-				dateFixture.String(),
+				dateFixture.Format(time.RFC3339),
 				globalEventName,
 				Logger.LogLevelEmergency,
 				fmt.Sprintf("%s", context),
