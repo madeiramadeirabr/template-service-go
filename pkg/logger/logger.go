@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"go-service-template/pkg/utils"
+	"time"
 )
 
 type LogLevelEnum string
@@ -60,7 +61,7 @@ func (logger Logger) FormatMessage(
 	logMessageOptions LogMessageOptions,
 ) (string, error) {
 	logMessage := LogMessage{
-		GlobalEventTimestamp: logger.Clock.GetCurrentTimestamp().String(),
+		GlobalEventTimestamp: logger.Clock.GetCurrentTimestamp().Format(time.RFC3339),
 		Level:                level,
 		Message:              message,
 		ServiceName:          logger.ServiceName,
