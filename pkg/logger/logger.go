@@ -33,7 +33,7 @@ type LogMessage struct {
 	TraceID              string       `json:"trace_id,omitempty"`
 }
 
-// Logger TODO: format context to json when is a struct
+// Logger TODO: format context to json when it's a struct
 type Logger struct {
 	SessionID                string
 	ServiceName              string
