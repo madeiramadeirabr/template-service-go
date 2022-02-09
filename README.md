@@ -56,7 +56,7 @@ $ go test ./...
 
 ### Improve tests output
 
-To see a more friendly test output, install `gotestsum` globally by running
+To see a more friendly test output, install [gotestsum](https://github.com/gotestyourself/gotestsum) globally by running
 ```bash
 $ go install gotest.tools/gotestsum@latest
 ```
