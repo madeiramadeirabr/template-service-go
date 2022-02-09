@@ -79,4 +79,4 @@ $ git remote add origin https://github.com/{user}/{repo}.git
 Hint: use `$ git remote -v` to verify new remote
 
 ---
-Squad Core APIs
+Squad Core APIs • [MadeiraMadeira](https://www.madeiramadeira.com.br)
