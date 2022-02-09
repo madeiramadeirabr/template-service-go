@@ -20,7 +20,7 @@ func main() {
 		config.IsDevelopmentEnvironment(),
 	)
 	app := fiber.New()
-	healthcheckrouter.RegisterRoutes(app, logger)
+	healthcheckrouter.RegisterRoutes(app, logger, config)
 	logger.Info("\"🧜‍ Core APIs Go Service Template Listening on port: " + config.Port)
 	log.Fatal(app.Listen(":" + config.Port))
 }
