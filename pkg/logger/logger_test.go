@@ -14,15 +14,16 @@ func TestLogger(t *testing.T) {
 	sessionID := "aW1wb3N0byDDqSByb3Vibwo"
 	serviceName := "go-service-template"
 	dateFixture := utils.ClockMock{}.GetCurrentTimestamp()
-	logger := Logger.Logger{
-		TraceID:     traceID,
-		SessionID:   sessionID,
-		ServiceName: serviceName,
-		Clock:       utils.ClockMock{},
-	}
+	logger := Logger.New(
+		serviceName,
+		utils.ClockMock{},
+		true,
+	)
+	logger.TraceID = traceID
+	logger.SessionID = sessionID
 	message := "foo"
 
-	t.Run("Log", func(t *testing.T) {
+	t.Run("FormatMessage", func(t *testing.T) {
 		t.Run("Should return a log message correctly formatted without optional fields", func(t *testing.T) {
 			jsonStringMessage := fmt.Sprintf(
 				`{"global_event_timestamp":"%s","level":"%s","message":"%s","service_name":"%s","session_id":"%s","trace_id":"%s"}`,
@@ -35,7 +36,7 @@ func TestLogger(t *testing.T) {
 			)
 			expectedMessage, err := utils.IndentJsonString(jsonStringMessage)
 			assert.Nil(t, err, fmt.Sprintf("Expected no error, got: '%s'", err))
-			loggedMessage, err := logger.Log(message, Logger.LogLevelEmergency, Logger.LogMessageOptions{})
+			loggedMessage, err := logger.FormatMessage(message, Logger.LogLevelEmergency, Logger.LogMessageOptions{})
 			assert.Nil(t, err, fmt.Sprintf("Expected no error, got: '%s'", err))
 			assert.Equal(t, expectedMessage, loggedMessage)
 		})
@@ -57,7 +58,7 @@ func TestLogger(t *testing.T) {
 			)
 			expectedMessage, err := utils.IndentJsonString(jsonStringMessage)
 			assert.Nil(t, err, fmt.Sprintf("Expected no error, got: '%s'", err))
-			loggedMessage, err := logger.Log(
+			loggedMessage, err := logger.FormatMessage(
 				message,
 				Logger.LogLevelEmergency,
 				Logger.LogMessageOptions{GlobalEventName: globalEventName, Context: context},

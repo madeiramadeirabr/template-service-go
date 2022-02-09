@@ -4,16 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"go-service-template/pkg/utils"
-	"time"
 )
-
-type Logger struct {
-	SessionID                string
-	ServiceName              string
-	TraceID                  string
-	Clock                    utils.ClockInterface
-	IsDevelopmentEnvironment bool
-}
 
 type LogLevelEnum string
 
@@ -26,6 +17,11 @@ const (
 	LogLevelTrace     LogLevelEnum = "TRACE"
 )
 
+type LogMessageOptions struct {
+	GlobalEventName string      `json:"global_event_name,omitempty"`
+	Context         interface{} `json:"context,omitempty"`
+}
+
 type LogMessage struct {
 	GlobalEventTimestamp string       `json:"global_event_timestamp"`
 	GlobalEventName      string       `json:"global_event_name,omitempty"`
@@ -37,19 +33,34 @@ type LogMessage struct {
 	TraceID              string       `json:"trace_id,omitempty"`
 }
 
-type LogMessageOptions struct {
-	GlobalEventName string      `json:"global_event_name,omitempty"`
-	Context         interface{} `json:"context,omitempty"`
+// Logger TODO: format context to json when is a struct
+type Logger struct {
+	SessionID                string
+	ServiceName              string
+	TraceID                  string
+	Clock                    utils.ClockInterface
+	IsDevelopmentEnvironment bool
 }
 
-func (logger Logger) formatMessage(
+func New(
+	serviceName string,
+	clock utils.ClockInterface,
+	isDevelopmentEnvironment bool,
+) *Logger {
+	return &Logger{
+		ServiceName:              serviceName,
+		Clock:                    clock,
+		IsDevelopmentEnvironment: isDevelopmentEnvironment,
+	}
+}
+
+func (logger Logger) FormatMessage(
 	message string,
 	level LogLevelEnum,
-	timestamp time.Time,
 	logMessageOptions LogMessageOptions,
 ) (string, error) {
 	logMessage := LogMessage{
-		GlobalEventTimestamp: timestamp.String(),
+		GlobalEventTimestamp: logger.Clock.GetCurrentTimestamp().String(),
 		Level:                level,
 		Message:              message,
 		ServiceName:          logger.ServiceName,
@@ -72,10 +83,9 @@ func (logger Logger) formatMessage(
 }
 
 func (logger Logger) Log(message string, logLevel LogLevelEnum, logMessageOptions LogMessageOptions) {
-	formattedMessage, err := logger.formatMessage(
+	formattedMessage, err := logger.FormatMessage(
 		message,
 		logLevel,
-		logger.Clock.GetCurrentTimestamp(),
 		logMessageOptions,
 	)
 	if err != nil {
