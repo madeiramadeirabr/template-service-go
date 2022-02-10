@@ -1,8 +1,8 @@
-package healthcheckrouter
+package healthcheck
 
 import (
 	"go-service-template/internal/configuration"
-	healthCheckHandler "go-service-template/internal/health-check/handlers"
+	healthCheckHandler "go-service-template/internal/healthcheck/handlers"
 	"go-service-template/pkg/logger"
 
 	"github.com/gofiber/fiber/v2"

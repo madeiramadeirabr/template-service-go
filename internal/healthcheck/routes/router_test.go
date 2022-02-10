@@ -1,9 +1,9 @@
-package healthcheckrouter_test
+package healthcheck_test
 
 import (
 	"fmt"
 	"go-service-template/internal/configuration"
-	healthCheckRouter "go-service-template/internal/health-check/routes"
+	healthCheckRouter "go-service-template/internal/healthcheck/routes"
 	"go-service-template/pkg/logger"
 	"go-service-template/pkg/utils"
 	"net/http/httptest"
