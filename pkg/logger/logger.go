@@ -76,11 +76,18 @@ func (logger Logger) FormatMessage(
 			logMessage.Context = context
 		}
 	}
-	formattedLogMessage, err := json.MarshalIndent(logMessage, "", "    ")
+	if logger.IsDevelopmentEnvironment {
+		indentedJSONLogMessage, err := json.MarshalIndent(logMessage, "", "    ")
+		if err != nil {
+			return "", err
+		}
+		return string(indentedJSONLogMessage), nil
+	}
+	inLineJSONLogMessage, err := json.Marshal(logMessage)
 	if err != nil {
 		return "", err
 	}
-	return string(formattedLogMessage), nil
+	return string(inLineJSONLogMessage), nil
 }
 
 func (logger Logger) Log(message string, logLevel LogLevelEnum, logMessageOptions LogMessageOptions) {

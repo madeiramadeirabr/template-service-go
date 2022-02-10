@@ -41,6 +41,7 @@ func TestLogger(t *testing.T) {
 			assert.Nil(t, err, fmt.Sprintf("Expected no error, got: '%s'", err))
 			assert.Equal(t, expectedMessage, loggedMessage)
 		})
+
 		t.Run("Should return a log message correctly formatted with the optional fields set", func(t *testing.T) {
 			globalEventName := "GO_SERVICE_TEMPLATE_EXAMPLE_EVENT_TOPIC"
 			context := map[string]string{
@@ -66,6 +67,23 @@ func TestLogger(t *testing.T) {
 			)
 			assert.Nil(t, err, fmt.Sprintf("Expected no error, got: '%s'", err))
 			assert.Equal(t, expectedMessage, loggedMessage)
+		})
+
+		t.Run("Should return an inline JSON string when out of development environment", func(t *testing.T) {
+			logger.IsDevelopmentEnvironment = false
+			jsonStringMessage := fmt.Sprintf(
+				`{"global_event_timestamp":"%s","level":"%s","message":"%s","service_name":"%s","session_id":"%s","trace_id":"%s"}`,
+				dateFixture.Format(time.RFC3339),
+				Logger.LogLevelEmergency,
+				message,
+				serviceName,
+				sessionID,
+				traceID,
+			)
+			loggedMessage, err := logger.FormatMessage(message, Logger.LogLevelEmergency, Logger.LogMessageOptions{})
+			assert.Nil(t, err, fmt.Sprintf("Expected no error, got: '%s'", err))
+			assert.Equal(t, jsonStringMessage, loggedMessage)
+			logger.IsDevelopmentEnvironment = true
 		})
 	})
 }

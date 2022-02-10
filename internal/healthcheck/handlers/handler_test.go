@@ -6,7 +6,7 @@ import (
 	"go-service-template/pkg/utils"
 	"testing"
 
-	healthCheckHandler "go-service-template/internal/health-check/handlers"
+	healthCheckHandler "go-service-template/internal/healthcheck/handlers"
 
 	"github.com/stretchr/testify/assert"
 )
