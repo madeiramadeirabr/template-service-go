@@ -19,6 +19,8 @@ MadeiraMadeira boilerplate project to build scalable, testable and high performa
 - Automatic pre-commit code analysis and lint with `golint`, `govet` and `goimports`;
 - Automatic pre-push testing;
 - `configuration`: easily manage environment variables and app configuration;
+  - it reads a `.env` file when its available, and load system variables when it's not;
+  - it also validates the available variables based on the `AppConfig` struct;
 - `healthcheck`: REST endpoint that returns relevant information about the application status;
 - `logger`: easily manage application logs following the [MMRFC1](https://madeiramadeira.atlassian.net/wiki/spaces/CAR/pages/2317942893/MMRFC+1+-+Log) standards;
 - Docker infrastructure with Docker Compose.
