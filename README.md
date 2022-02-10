@@ -44,13 +44,13 @@ $ git remote add origin https://github.com/{user}/{repo}.git
 
 #### Docker setup
 ```bash
-$ ./setup.sh
-$ docker-compose -f docker/compose.yml up
+$ ./tools/setup.sh
+$ docker-compose -f docker-compose.yml up
 ```
 
 #### Local setup
 ```bash
-$ ./setup.sh
+$ ./tools/setup.sh
 $ go mod download
 $ go run ./cmd/SERVICE_NAME/main.go
 
