@@ -31,6 +31,9 @@ Download and extract the project, then:
 $ mv go-service-template-production {your_project_name}
 $ git init
 $ git remote add origin https://github.com/{user}/{repo}.git
+
+# This command will replace imports with your project name
+$ grep -RiIl 'go-service-template' | xargs -I@ sed -i '' 's/go-service-template/{your_project_name}/g' @
 ```
 
 > Hint: use `$ git remote -v` to verify new remote

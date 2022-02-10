@@ -8,7 +8,7 @@ echo "${GREEN} Setting up project for local development...${NC}"
 
 echo "  - Installing Git hooks"
 {
-  cp ./tools/hooks/* .git/hooks && echo "${GREEN}  DONE ${NC}"
+  ln -s ./tools/hooks/* .git/hooks && echo "${GREEN}  DONE ${NC}"
 } || {
  echo "${RED} ERROR ${NC}" && ERROR=1
 }
