@@ -15,7 +15,7 @@ import (
 func main() {
 	config, err := configuration.Load()
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 	isDevelopment := config.IsDevelopmentEnvironment()
 
