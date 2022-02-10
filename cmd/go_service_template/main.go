@@ -14,7 +14,9 @@ import (
 
 func main() {
 	config, err := configuration.Load()
-	utils.Fck(err)
+	if err != nil {
+		panic(err)
+	}
 	isDevelopment := config.IsDevelopmentEnvironment()
 
 	logger := Logger.New(
@@ -23,7 +25,7 @@ func main() {
 		isDevelopment,
 	)
 	app := fiber.New()
- 
+
 	ErrorHandlerConfig := recover.Config{
 		EnableStackTrace: isDevelopment,
 	}
