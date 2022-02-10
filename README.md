@@ -43,7 +43,7 @@ $ git remote add origin https://github.com/{user}/{repo}.git
 #### Docker setup
 ```bash
 $ ./setup.sh
-$ docker-compose -f docker/compose.yml up
+$ docker-compose -f docker-compose.yml up
 ```
 
 #### Local setup
