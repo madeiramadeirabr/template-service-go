@@ -3,7 +3,7 @@ package healthcheckrouter_test
 import (
 	"fmt"
 	"go-service-template/internal/configuration"
-	healthCheckRouter "go-service-template/internal/health-check/routes"
+	healthCheckRouter "go-service-template/internal/healthcheck/routes"
 	"go-service-template/pkg/logger"
 	"go-service-template/pkg/utils"
 	"net/http/httptest"
@@ -26,7 +26,7 @@ func TestHealthCheckRouter(t *testing.T) {
 
 	t.Run("Health check handler", func(t *testing.T) {
 		t.Run("It should return status 200", func(t *testing.T) {
-			resp, err := app.Test(httptest.NewRequest("GET", "/health-check", nil))
+			resp, err := app.Test(httptest.NewRequest("GET", "/healthcheck", nil))
 			assert.Nil(t, err, fmt.Sprintf("Expected no error, but got '%s'", err))
 			assert.Equal(t, resp.StatusCode, 200, "Expected status code 200, but got %d", resp.StatusCode)
 		})

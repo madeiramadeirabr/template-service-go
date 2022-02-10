@@ -2,7 +2,7 @@ package main
 
 import (
 	"go-service-template/internal/configuration"
-	healthcheckrouter "go-service-template/internal/health-check/routes"
+	healthcheckrouter "go-service-template/internal/healthcheck/routes"
 	Logger "go-service-template/pkg/logger"
 	"go-service-template/pkg/utils"
 
@@ -23,7 +23,7 @@ func main() {
 		isDevelopment,
 	)
 	app := fiber.New()
- 
+
 	ErrorHandlerConfig := recover.Config{
 		EnableStackTrace: isDevelopment,
 	}
