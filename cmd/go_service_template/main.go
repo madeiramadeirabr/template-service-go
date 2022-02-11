@@ -14,7 +14,9 @@ import (
 
 func main() {
 	config, err := configuration.Load()
-	utils.Fck(err)
+	if err != nil {
+		log.Fatal(err)
+	}
 	isDevelopment := config.IsDevelopmentEnvironment()
 
 	logger := Logger.New(
