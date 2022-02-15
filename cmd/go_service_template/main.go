@@ -2,7 +2,7 @@ package main
 
 import (
 	"go-service-template/internal/configuration"
-	healthcheckrouter "go-service-template/internal/healthcheck/routes"
+	healthCheckRouter "go-service-template/internal/healthcheck/routes"
 	"go-service-template/pkg/clock"
 	Logger "go-service-template/pkg/logger"
 	"log"
@@ -30,7 +30,7 @@ func main() {
 	}
 	app.Use(recover.New(ErrorHandlerConfig))
 
-	healthcheckrouter.RegisterRoutes(app, logger, config)
+	healthCheckRouter.RegisterRoutes(app, logger, config)
 	logger.Info("\"🧜‍ Core APIs Go Service Template Listening on port: " + config.Port)
 	log.Fatal(app.Listen(":" + config.Port))
 }
