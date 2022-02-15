@@ -3,9 +3,8 @@ package main
 import (
 	"go-service-template/internal/configuration"
 	healthcheckrouter "go-service-template/internal/healthcheck/routes"
+	"go-service-template/pkg/clock"
 	Logger "go-service-template/pkg/logger"
-	"go-service-template/pkg/utils"
-
 	"log"
 
 	"github.com/gofiber/fiber/v2"
@@ -21,7 +20,7 @@ func main() {
 
 	logger := Logger.New(
 		config.ServiceName,
-		utils.Clock{},
+		clock.Clock{},
 		isDevelopment,
 	)
 	app := fiber.New()

@@ -3,9 +3,30 @@ package logger
 import (
 	"encoding/json"
 	"fmt"
-	"go-service-template/pkg/utils"
+	"go-service-template/pkg/clock"
 	"time"
 )
+
+type Interface interface {
+	FormatMessage(
+		message string,
+		level LogLevelEnum,
+		logMessageOptions LogMessageOptions,
+	) (string, error)
+	Log(message string, logLevel LogLevelEnum, logMessageOptions LogMessageOptions)
+	Emergency(message string)
+	EmergencyWithOptions(message string, logMessageOptions LogMessageOptions)
+	Error(message string)
+	ErrorWithOptions(message string, logMessageOptions LogMessageOptions)
+	Warn(message string)
+	WarnWithOptions(message string, logMessageOptions LogMessageOptions)
+	Info(message string)
+	InfoWithOptions(message string, logMessageOptions LogMessageOptions)
+	Debug(message string)
+	DebugWithOptions(message string, logMessageOptions LogMessageOptions)
+	Trace(message string)
+	TraceWithOptions(message string, logMessageOptions LogMessageOptions)
+}
 
 type LogLevelEnum string
 
@@ -39,13 +60,13 @@ type Logger struct {
 	SessionID                string
 	ServiceName              string
 	TraceID                  string
-	Clock                    utils.ClockInterface
+	Clock                    clock.Interface
 	IsDevelopmentEnvironment bool
 }
 
 func New(
 	serviceName string,
-	clock utils.ClockInterface,
+	clock clock.Interface,
 	isDevelopmentEnvironment bool,
 ) *Logger {
 	return &Logger{
