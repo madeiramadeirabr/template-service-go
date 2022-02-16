@@ -1,7 +1,7 @@
-package utils
+package clock
 
 import "time"
 
-type ClockInterface interface {
+type Interface interface {
 	GetCurrentTimestamp() time.Time
 }

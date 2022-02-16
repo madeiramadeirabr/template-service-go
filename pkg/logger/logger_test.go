@@ -2,6 +2,7 @@ package logger_test
 
 import (
 	"fmt"
+	"go-service-template/pkg/clock"
 	Logger "go-service-template/pkg/logger"
 	"go-service-template/pkg/utils"
 	"testing"
@@ -14,10 +15,10 @@ func TestLogger(t *testing.T) {
 	traceID := "c29uZWdhw6fDo28gw6kgbGVnw610aW1hIGRlZmVzYQo="
 	sessionID := "aW1wb3N0byDDqSByb3Vibwo"
 	serviceName := "go-service-template"
-	dateFixture := utils.ClockMock{}.GetCurrentTimestamp()
+	dateFixture := clock.Mock{}.GetCurrentTimestamp()
 	logger := Logger.New(
 		serviceName,
-		utils.ClockMock{},
+		clock.Mock{},
 		true,
 	)
 	logger.TraceID = traceID

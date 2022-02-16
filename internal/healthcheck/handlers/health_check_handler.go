@@ -6,7 +6,7 @@ import (
 )
 
 // GetStatus add your health check logic here
-func GetStatus(logger *logger.Logger, config *configuration.AppConfig) map[string]interface{} {
+func GetStatus(logger logger.Interface, config *configuration.AppConfig) map[string]interface{} {
 	logger.Info("Executing Health Check...")
 	return map[string]interface{}{
 		"serviceName": config.ServiceName,

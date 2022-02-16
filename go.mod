@@ -7,6 +7,7 @@ require (
 	github.com/gofiber/fiber/v2 v2.26.0
 	github.com/joho/godotenv v1.4.0
 	github.com/stretchr/testify v1.7.0
+	github.com/thoas/go-funk v0.9.1
 )
 
 require (
@@ -15,7 +16,7 @@ require (
 	github.com/davecgh/go-spew v1.1.0 // indirect
 	github.com/klauspost/compress v1.14.2 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
-	github.com/thoas/go-funk v0.9.1 // indirect
+	github.com/stretchr/objx v0.1.0 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasthttp v1.33.0 // indirect
 	github.com/valyala/tcplisten v1.0.0 // indirect

@@ -75,7 +75,7 @@ To see a more friendly test output, install [gotestsum](https://github.com/gotes
 ```bash
 $ go install gotest.tools/gotestsum@latest
 ```
-And execute in project root directory.
+And execute at the project root directory:
 ```bash
 $ gotestsum --format testname 
 ```

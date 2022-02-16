@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"go-service-template/internal/configuration"
 	healthCheckRouter "go-service-template/internal/healthcheck/routes"
+	"go-service-template/pkg/clock"
 	"go-service-template/pkg/logger"
-	"go-service-template/pkg/utils"
 	"net/http/httptest"
 	"testing"
 
@@ -17,7 +17,7 @@ func TestHealthCheckRouter(t *testing.T) {
 
 	Logger := logger.New(
 		"Foo",
-		utils.ClockMock{},
+		clock.Mock{},
 		true,
 	)
 	config, _ := configuration.Load()
