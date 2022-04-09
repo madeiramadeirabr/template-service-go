@@ -99,7 +99,7 @@ def repeat(word, m, n):
 
 
 class GuidelinesChecker:
-    _GUIDES_CONFIG = {
+    GUIDES_CONFIG = {
         "github-templates": {"callback": "has_github_templates", "required": True},
         "github-actions": {"callback": "has_github_actions", "required": True},
         "github-docs": {"callback": "has_github_docs", "required": True},
@@ -122,7 +122,7 @@ class GuidelinesChecker:
     def check(self):
         global _GUIDELINES
         global _FINAL_RESULT
-        for guide_key, object in self._GUIDES_CONFIG.items():
+        for guide_key, object in self.GUIDES_CONFIG.items():
             callback = object['callback']
             if hasattr(self, str(callback)):
                 result = getattr(self, callback)()
@@ -319,17 +319,20 @@ class GuidelinesChecker:
 checker = GuidelinesChecker()
 checker.check()
 
-print(repeat('-', 1, 60))
+_LINE_SIZE = 80
+print(repeat('-', 1, _LINE_SIZE))
 print('{} - {}'.format('Guideline Checker', _VERSION_STR))
-print(repeat('-', 1, 60))
-print('{}{}'.format('Guidelines'.ljust(40), 'Achieved/Founded'))
-print(repeat('-', 1, 60))
+print(repeat('-', 1, _LINE_SIZE))
+print('{}{}{}'.format('Guidelines'.ljust(40), 'Achieved/Found'.ljust(20), 'Required'))
+print(repeat('-', 1, _LINE_SIZE))
 for k in _GD_KEYS:
     value = _GUIDELINES[k]
     if isinstance(value, bool):
-        print('{}{}'.format(k.ljust(40), str(value)))
+        print('{}{}{}'.format(k.ljust(40), str(value).ljust(20),
+            GuidelinesChecker.GUIDES_CONFIG[k]['required']))
     elif isinstance(value, dict) or isinstance(value, list):
-        print('{}{}'.format(k.ljust(40), ''))
+        print('{}{}{}'.format(k.ljust(40), ''.ljust(20),
+            GuidelinesChecker.GUIDES_CONFIG[k]['required']))
         if isinstance(value, dict):
             sub_keys = value.keys()
         else:
@@ -353,9 +356,9 @@ for k in _GD_KEYS:
                 print('{}{}{}'.format(''.ljust(10), str(key).ljust(30), val))
             else:
                 print('{}{}{}'.format(''.ljust(5), str(sk).ljust(35), sv))
-print(repeat('-', 1, 60))
+print(repeat('-', 1, _LINE_SIZE))
 print('{}{}'.format('Final Result'.ljust(40), _FINAL_RESULT))
-print(repeat('-', 1, 60))
+print(repeat('-', 1, _LINE_SIZE))
 # print('Generating the guidelines file: guidelines.yaml')
 
 if _FINAL_RESULT:
