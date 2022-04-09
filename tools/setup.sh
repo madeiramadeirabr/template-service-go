@@ -4,7 +4,7 @@ GREEN=$'\e[0;32m'
 RED=$'\e[0;31m'
 NC=$'\e[0m'
 ERROR=0
-DEFAULT_PROJECT_NAME='go-service-template'
+DEFAULT_PROJECT_NAME='template-service-go'
 
 echo "${GREEN} Setting up project for local development...${NC}"
 
