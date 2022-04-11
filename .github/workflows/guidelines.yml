@@ -1,0 +1,48 @@
+# Summary:
+# Execute the pylint analysis on code
+# Read here for mode info: https://pylint.pycqa.org/en/latest/ and  https://www.python.org/dev/peps/pep-0008/
+
+name: Execute the Guideline Analysis
+
+#on:
+#  # There are several ways to trigger Github actions - See https://help.github.com/en/actions/reference/events-that-trigger-workflows#example-using-a-single-event for a comprehensive list:
+#  # - "push": Triggers each time a commit is pushed
+#  # - "pull_request": Triggers each time a commit is pushed within a pull request, it makes it much easier to write comments within the PR, but it suffers some strong limitations:
+#  #   - There is no way to trigger when a PR is merged into another - See https://github.community/t/pull-request-action-does-not-run-on-merge/16092?u=vadorequest
+#  #   - It won't trigger when the PR is conflicting with its base branch - See https://github.community/t/run-actions-on-pull-requests-with-merge-conflicts/17104/2?u=vadorequest
+#  push: # Triggers on each pushed commit
+#    branches:
+#      - 'master'
+on: [ pull_request ]
+
+jobs:
+  setup-environment:
+    name: Setup deployment environment (Ubuntu 18.04 - Python 3.x)
+    runs-on: ubuntu-18.04
+    strategy:
+      matrix:
+        python-version: [ "3.8" ]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+          architecture: x64
+  guideline:
+    name: Setup Guideline Analisys (Ubuntu 18.04)
+    runs-on: ubuntu-18.04
+    strategy:
+      matrix:
+        python-version: [ "3.8" ]
+    needs: setup-environment
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+          architecture: x64
+      - name: Running guideline analisys
+        run: |
+          ./scripts/guidelines-checker.py
