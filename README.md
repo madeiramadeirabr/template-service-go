@@ -1,4 +1,4 @@
-# Core APIs Go Service Template
+# MadeiraMadeira Go Service Template
 
 MadeiraMadeira boilerplate project to build scalable, testable and high performance Go microservices.
 
@@ -95,5 +95,3 @@ $ docker build \
     -t go-service-template-production:latest \
     -f docker/Dockerfile .
 ```
----
-Squad Core APIs • [MadeiraMadeira](https://www.madeiramadeira.com.br)
