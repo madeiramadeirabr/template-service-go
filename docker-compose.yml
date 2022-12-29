@@ -2,12 +2,32 @@ version: "3.7"
 
 services:
   # Application
-  go-service-template:
-    extends:
-      file: docker/compose-common.yml
-      service: base-build
-    build:
-      args:
-        - SERVICE_PATH=go_service_template
+#  go-service-template:
+#    extends:
+#      file: docker/compose-common.yml
+#      service: base-build
+#    build:
+#      args:
+#        - SERVICE_PATH=go_service_template
+#    ports:
+#      - 8080:8080
+
+  localstack:
+    container_name: myservice_template_localstack
+    privileged: true
+    image: localstack/localstack:latest
     ports:
-      - 8080:8080
+      - "4566:4566"
+    volumes:
+      # Use the current directory as the entry point
+      # for additional configs
+      - './:/docker-entrypoint-initaws.d'
+    networks:
+      - service-go-v1
+
+volumes:
+  data-volume:
+
+networks:
+  service-go-v1:
+    external: true

@@ -21,10 +21,14 @@ const (
 )
 
 type AppConfig struct {
-	Port           string `env:"PORT"`
-	ApplicationEnv string `env:"APPLICATION_ENV"`
-	IsTesting      bool   `env:"TESTING"`
-	ServiceName    string `env:"SERVICE_NAME"`
+	Port                string `env:"PORT"`
+	ApplicationEnv      string `env:"APPLICATION_ENV"`
+	IsTesting           bool   `env:"TESTING"`
+	ServiceName         string `env:"SERVICE_NAME"`
+	LocalStackHost      string `env:"LOCALSTACK_HOST"`
+	LocalStackSqsHost   string `env:"LOCALSTACK_SQS_HOST"`
+	LocalStackSqsName   string `env:"LOCALSTACK_SQS_NAME"`
+	LocalStackSqsRegion string `env:"LOCALSTACK_SQS_REGION"`
 }
 
 func (appConfig AppConfig) IsDevelopmentEnvironment() bool {
@@ -56,9 +60,9 @@ func GetEnvBool(key string) bool {
 	return false
 }
 
-func Load() (*AppConfig, error) {
+func Load(dotenvfiles ...string) (*AppConfig, error) {
 	config := AppConfig{}
-	err := godotenv.Load()
+	err := godotenv.Load(dotenvfiles...)
 	if err != nil {
 		fmt.Println("[WARN] .env file not found. Loading from system environment")
 	}
@@ -66,5 +70,9 @@ func Load() (*AppConfig, error) {
 	config.ApplicationEnv = GetEnvString("APPLICATION_ENV")
 	config.IsTesting = GetEnvBool("TESTING")
 	config.ServiceName = GetEnvString("SERVICE_NAME")
+	config.LocalStackHost = GetEnvString("LOCALSTACK_HOST")
+	config.LocalStackSqsHost = GetEnvString("LOCALSTACK_SQS_HOST")
+	config.LocalStackSqsName = GetEnvString("LOCALSTACK_SQS_NAME")
+	config.LocalStackSqsRegion = GetEnvString("LOCALSTACK_SQS_REGION")
 	return &config, config.Validate()
 }

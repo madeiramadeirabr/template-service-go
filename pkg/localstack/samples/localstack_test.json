@@ -1,0 +1,9 @@
+{
+  "version": "v1",
+  "source": "TemplateServiceGO",
+  "command": "localstack-test",
+  "occurred_at": "2022-12-26 17:28:52",
+  "payload": {
+    "test": "mensagem para testar localstack"
+  }
+}
