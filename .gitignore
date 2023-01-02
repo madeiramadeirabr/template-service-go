@@ -43,3 +43,6 @@ go.work
 
 # Temporary files
 tmp/*
+
+#Vendor
+/vendor/*
