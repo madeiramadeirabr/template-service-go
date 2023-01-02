@@ -2,15 +2,15 @@ version: "3.7"
 
 services:
   # Application
-#  go-service-template:
-#    extends:
-#      file: docker/compose-common.yml
-#      service: base-build
-#    build:
-#      args:
-#        - SERVICE_PATH=go_service_template
-#    ports:
-#      - 8080:8080
+  go-service-template:
+    extends:
+      file: docker/compose-common.yml
+      service: base-build
+    build:
+      args:
+        - SERVICE_PATH=go_service_template
+    ports:
+      - 8080:8080
 
   localstack:
     container_name: myservice_template_localstack
