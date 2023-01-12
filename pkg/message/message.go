@@ -2,20 +2,24 @@ package message
 
 import (
 	"context"
+	"go-service-template/internal/configuration"
 	"go-service-template/pkg/cloud"
 	"log"
 )
 
-func Message(client cloud.MessageClient, messageBody string) {
+func Message(createQueue bool, config *configuration.AppConfig, client cloud.MessageClient, messageBody string) {
 	ctx := context.Background()
 
-	queURL := createQueue(ctx, client)
-	send(ctx, client, queURL, messageBody)
+	queueURL := config.SqsHost
+	if createQueue {
+		queueURL = createQueueSQS(ctx, client)
+	}
+	send(ctx, client, queueURL, messageBody)
 	//rcvHnd := receive(ctx, client, queURL)
 	//deleteMessage(ctx, client, queURL, rcvHnd)
 }
 
-func createQueue(ctx context.Context, client cloud.MessageClient) string {
+func createQueueSQS(ctx context.Context, client cloud.MessageClient) string {
 	url, err := client.CreateQueue(ctx, "test-queue", false)
 	if err != nil {
 		log.Fatalln(err)

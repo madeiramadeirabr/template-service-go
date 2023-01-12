@@ -1,4 +1,4 @@
-package localstack
+package helpers
 
 import (
 	"encoding/json"
@@ -13,27 +13,22 @@ import (
 	"time"
 )
 
-func LoadLocalStack(sqs, s3 bool, messageSqs string, config *configuration.AppConfig) {
+// CreateSQS Metodo responsavel por criar fila SQS
+func CreateSQS(createQueue bool, messageSqs string, config *configuration.AppConfig) {
 
-	if sqs {
-		// Create a session instance.
-		ses, err := aws.New(aws.Config{
-			Address: config.LocalStackHost,
-			Region:  config.LocalStackSqsRegion,
-			Profile: "localstack",
-			ID:      "test",
-			Secret:  "test",
-		})
-		if err != nil {
-			log.Fatalln(err)
-		}
-
-		message.Message(aws.NewSQS(ses, time.Second), messageSqs)
+	// Create a session instance.
+	ses, err := aws.New(aws.Config{
+		Address: config.SqsHost,
+		Region:  config.RegionName,
+		Profile: "localstack",
+		ID:      "test",
+		Secret:  "test",
+	})
+	if err != nil {
+		log.Fatalln(err)
 	}
 
-	if s3 {
-		fmt.Println("Ainda preciso desenvolver essa parte.")
-	}
+	message.Message(createQueue, config, aws.NewSQS(ses, time.Second), messageSqs)
 }
 
 func GetMessageRequest(file string) (string, error) {

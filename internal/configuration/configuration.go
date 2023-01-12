@@ -25,10 +25,10 @@ type AppConfig struct {
 	ApplicationEnv      string `env:"APPLICATION_ENV"`
 	IsTesting           bool   `env:"TESTING"`
 	ServiceName         string `env:"SERVICE_NAME"`
-	LocalStackHost      string `env:"LOCALSTACK_HOST"`
-	LocalStackSqsHost   string `env:"LOCALSTACK_SQS_HOST"`
-	LocalStackSqsName   string `env:"LOCALSTACK_SQS_NAME"`
-	LocalStackSqsRegion string `env:"LOCALSTACK_SQS_REGION"`
+	SqsEndpoint		    string `env:"SQS_ENDPOINT"`
+	SqsHost   			string `env:"SQS_HOST"`
+	SqsName   			string `env:"SQS_NAME"`
+	RegionName 			string `env:"REGION_NAME"`
 }
 
 func (appConfig AppConfig) IsDevelopmentEnvironment() bool {
@@ -70,9 +70,9 @@ func Load(dotenvfiles ...string) (*AppConfig, error) {
 	config.ApplicationEnv = GetEnvString("APPLICATION_ENV")
 	config.IsTesting = GetEnvBool("TESTING")
 	config.ServiceName = GetEnvString("SERVICE_NAME")
-	config.LocalStackHost = GetEnvString("LOCALSTACK_HOST")
-	config.LocalStackSqsHost = GetEnvString("LOCALSTACK_SQS_HOST")
-	config.LocalStackSqsName = GetEnvString("LOCALSTACK_SQS_NAME")
-	config.LocalStackSqsRegion = GetEnvString("LOCALSTACK_SQS_REGION")
+	config.SqsEndpoint = GetEnvString("SQS_ENDPOINT")
+	config.SqsHost = GetEnvString("SQS_HOST")
+	config.SqsName = GetEnvString("SQS_NAME")
+	config.RegionName = GetEnvString("REGION_NAME")
 	return &config, config.Validate()
 }
