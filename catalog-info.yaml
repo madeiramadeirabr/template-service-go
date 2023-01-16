@@ -1,0 +1,13 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: template-service-go
+  annotations:
+    github.com/project-slug: madeiramadeirabr/template-service-go
+  tags:
+    - go
+spec:
+  type: service
+  lifecycle: production
+  owner: team-platform-engineering-admin
+  
