@@ -4,10 +4,14 @@ metadata:
   name: template-service-go
   annotations:
     github.com/project-slug: madeiramadeirabr/template-service-go
+    backstage.io/techdocs-ref: dir:.
   tags:
     - go
+    - python
+    - shell
+    - dockerfile
 spec:
-  type: service
+  type: template
   lifecycle: production
   owner: team-platform-engineering-admin
   
