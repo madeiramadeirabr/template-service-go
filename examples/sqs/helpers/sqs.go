@@ -4,20 +4,18 @@ import (
 	"encoding/json"
 	"fmt"
 	"go-service-template/internal/configuration"
-	"go-service-template/pkg/cloud/aws"
-	"go-service-template/pkg/message"
+	awshelpersqs "go-service-template/pkg/cloud/aws"
 	"go-service-template/pkg/utils"
 	"io/ioutil"
-	"log"
 	"os"
 	"time"
 )
 
 // CreateSQS Metodo responsavel por criar fila SQS
-func CreateSQS(createQueue bool, messageSqs string, config *configuration.AppConfig) {
+func CreateSQS(createQueue bool, sendMessage bool, deleteMessage bool, messageSqs string, config *configuration.AppConfig) (string, error) {
 
 	// Create a session instance.
-	ses, err := aws.New(aws.Config{
+	ses, err := awshelpersqs.New(awshelpersqs.Config{
 		Address: config.SqsHost,
 		Region:  config.RegionName,
 		Profile: "localstack",
@@ -25,10 +23,15 @@ func CreateSQS(createQueue bool, messageSqs string, config *configuration.AppCon
 		Secret:  "test",
 	})
 	if err != nil {
-		log.Fatalln(err)
+		return "", err
 	}
 
-	message.Message(createQueue, config, aws.NewSQS(ses, time.Second), messageSqs)
+	messageId, err := awshelpersqs.CreateSqsAndSendMessage(createQueue, sendMessage, deleteMessage, config, awshelpersqs.NewSQS(ses, time.Second), messageSqs)
+	if err != nil {
+		return "", err
+	}
+
+	return messageId, nil
 }
 
 func GetMessageRequest(file string) (string, error) {
@@ -61,3 +64,66 @@ func GetMessageRequest(file string) (string, error) {
 
 	return string(response), nil
 }
+
+func ExistSQS(config *configuration.AppConfig, urlSqs string) bool  {
+	// Create a session instance.
+	ses, err := awshelpersqs.New(awshelpersqs.Config{
+		Address: config.SqsHost,
+		Region:  config.RegionName,
+		Profile: "localstack",
+		ID:      "test",
+		Secret:  "test",
+	})
+	if err != nil {
+		fmt.Println("Error in create a session instance", err)
+		return false
+	}
+
+	url, err := awshelpersqs.QueueARN(awshelpersqs.NewSQS(ses, time.Second), urlSqs)
+	if err != nil || url == "" {
+		fmt.Println("SQS Queue not exist")
+		return false
+	}
+
+	return true
+}
+
+func DeleteMessageFromSQS(config *configuration.AppConfig, urlSqs string) bool  {
+	// Create a session instance.
+	ses, err := awshelpersqs.New(awshelpersqs.Config{
+		Address: config.SqsHost,
+		Region:  config.RegionName,
+		Profile: "localstack",
+		ID:      "test",
+		Secret:  "test",
+	})
+	if err != nil {
+		fmt.Println("Error in create a session instance", err)
+		return false
+	}
+
+	awshelpersqs.DeleteMessage(awshelpersqs.NewSQS(ses, time.Second), urlSqs)
+
+	return true
+}
+
+func ReceiveMessageFromSQs(config *configuration.AppConfig, urlSqs string) *awshelpersqs.Message {
+	// Create a session instance.
+	ses, err := awshelpersqs.New(awshelpersqs.Config{
+		Address: config.SqsHost,
+		Region:  config.RegionName,
+		Profile: "localstack",
+		ID:      "test",
+		Secret:  "test",
+	})
+	if err != nil {
+		fmt.Println("Error in create a session instance", err)
+		return nil
+	}
+
+	message := awshelpersqs.ReceiveMessage(awshelpersqs.NewSQS(ses, time.Second), urlSqs)
+
+	return message
+}
+
+

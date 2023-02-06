@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"go-service-template/pkg/cloud"
 	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -12,7 +11,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/sqs"
 )
 
-var _ cloud.MessageClient = SQS{}
+var _ MessageClient = SQS{}
 
 type SQS struct {
 	timeout time.Duration
@@ -27,7 +26,8 @@ func NewSQS(session *session.Session, timeout time.Duration) SQS {
 }
 
 func (s SQS) CreateQueue(ctx context.Context, queueName string, isDLX bool) (string, error) {
-	ctx, cancel := context.WithTimeout(ctx, s.timeout)
+	fmt.Println(s.timeout)
+	ctx, cancel := context.WithTimeout(ctx, 30*s.timeout)
 	defer cancel()
 
 	ret := "345600" // 4 days
@@ -51,7 +51,7 @@ func (s SQS) CreateQueue(ctx context.Context, queueName string, isDLX bool) (str
 }
 
 func (s SQS) QueueARN(ctx context.Context, queueURL string) (string, error) {
-	ctx, cancel := context.WithTimeout(ctx, s.timeout)
+	ctx, cancel := context.WithTimeout(ctx, 30*s.timeout)
 	defer cancel()
 
 	res, err := s.client.GetQueueAttributesWithContext(ctx, &sqs.GetQueueAttributesInput{
@@ -93,7 +93,7 @@ func (s SQS) BindDLX(ctx context.Context, queueURL, dlxARN string) error {
 	return nil
 }
 
-func (s SQS) Send(ctx context.Context, req *cloud.SendRequest) (string, error) {
+func (s SQS) SendMessage(ctx context.Context, req *SendRequest) (string, error) {
 	ctx, cancel := context.WithTimeout(ctx, s.timeout)
 	defer cancel()
 
@@ -119,7 +119,7 @@ func (s SQS) Send(ctx context.Context, req *cloud.SendRequest) (string, error) {
 
 }
 
-func (s SQS) Receive(ctx context.Context, queueURL string) (*cloud.Message, error) {
+func (s SQS) ReceiveMessage(ctx context.Context, queueURL string) (*Message, error) {
 	// timeout = WaitTimeSeconds + 5
 	ctx, cancel := context.WithTimeout(ctx, time.Second*(20+5))
 	defer cancel()
@@ -143,7 +143,7 @@ func (s SQS) Receive(ctx context.Context, queueURL string) (*cloud.Message, erro
 		attrs[key] = *attr.StringValue
 	}
 
-	return &cloud.Message{
+	return &Message{
 		ID:            *res.Messages[0].MessageId,
 		ReceiptHandle: *res.Messages[0].ReceiptHandle,
 		Body:          *res.Messages[0].Body,
@@ -151,7 +151,7 @@ func (s SQS) Receive(ctx context.Context, queueURL string) (*cloud.Message, erro
 	}, nil
 }
 
-func (s SQS) Delete(ctx context.Context, queueURL, rcvHandle string) error {
+func (s SQS) DeleteMessage(ctx context.Context, queueURL, rcvHandle string) error {
 	ctx, cancel := context.WithTimeout(ctx, s.timeout)
 	defer cancel()
 

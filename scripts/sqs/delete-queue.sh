@@ -12,8 +12,8 @@ else
   else
     HOST=0.0.0.0
   fi
-  echo "aws --endpoint-url=http://$HOST:4566 sqs get-queue-url --queue-name $1"
-  aws --endpoint-url=http://$HOST:4566 sqs get-queue-url --queue-name $1
+  echo "aws --endpoint-url=http://$HOST:4566 sqs delete-queue-url --queue-name $1"
+  aws --endpoint-url=http://$HOST:4566 sqs delete-queue-url --queue-name $1
   if [ $? -eq 0 ]; then
     echo "aws --endpoint-url=http://$HOST:4566 sqs delete-queue --queue-url http://$HOST:4566/000000000000/$1"
     aws --endpoint-url=http://$HOST:4566 sqs delete-queue --queue-url http://$HOST:4566/000000000000/$1

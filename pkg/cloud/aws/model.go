@@ -1,4 +1,4 @@
-package cloud
+package aws
 
 type SendRequest struct {
 	QueueURL   string
