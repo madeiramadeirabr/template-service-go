@@ -26,7 +26,7 @@ func CreateSQS(createQueue bool, sendMessage bool, deleteMessage bool, messageSq
 		return "", err
 	}
 
-	messageId, err := awshelpersqs.CreateSqsAndSendMessage(createQueue, sendMessage, deleteMessage, config, awshelpersqs.NewSQS(ses, time.Second), messageSqs)
+	messageId, err := awshelpersqs.CreateSqsAndSendMessage(createQueue, sendMessage, config, awshelpersqs.NewSQS(ses, time.Second), messageSqs)
 	if err != nil {
 		return "", err
 	}

@@ -6,7 +6,7 @@ import (
 	"log"
 )
 
-func CreateSqsAndSendMessage(createQueue bool, sendMessage bool, deleteMessage bool, config *configuration.AppConfig, client MessageClient, messageBody string) (string, error) {
+func CreateSqsAndSendMessage(createQueue bool, sendMessage bool, config *configuration.AppConfig, client MessageClient, messageBody string) (string, error) {
 	ctx := context.Background()
 
 	queueURL := config.SqsHost

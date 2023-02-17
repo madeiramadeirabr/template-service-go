@@ -40,28 +40,28 @@ func loadSession() {
 }
 
 func JobHandlerGetMessages(queueURL string) (*sqs.ReceiveMessageOutput, error) {
-	//loadSession()
-	//
-	//receive := sqs.ReceiveMessageInput{
-	//	MessageAttributeNames: []*string{
-	//		aws.String(sqs.QueueAttributeNameAll),
-	//	},
-	//	AttributeNames: []*string{
-	//		aws.String(sqs.MessageSystemAttributeNameSentTimestamp),
-	//		aws.String(sqs.MessageSystemAttributeNameApproximateReceiveCount),
-	//	},
-	//	QueueUrl:            aws.String(queueURL),
-	//	MaxNumberOfMessages: aws.Int64(7),
-	//	VisibilityTimeout:   aws.Int64(30),
-	//	WaitTimeSeconds:     aws.Int64(2),
-	//}
-	//
-	//result, err := sqsInstance.ReceiveMessage(&receive)
-	//
-	//if err != nil {
-	//	return nil, err
-	//}
-	//return result, err
+	loadSession()
+
+	receive := sqs.ReceiveMessageInput{
+		MessageAttributeNames: []*string{
+			aws.String(sqs.QueueAttributeNameAll),
+		},
+		AttributeNames: []*string{
+			aws.String(sqs.MessageSystemAttributeNameSentTimestamp),
+			aws.String(sqs.MessageSystemAttributeNameApproximateReceiveCount),
+		},
+		QueueUrl:            aws.String(queueURL),
+		MaxNumberOfMessages: aws.Int64(7),
+		VisibilityTimeout:   aws.Int64(30),
+		WaitTimeSeconds:     aws.Int64(2),
+	}
+
+	result, err := sqsInstance.ReceiveMessage(&receive)
+
+	if err != nil {
+		return nil, err
+	}
+	return result, err
 }
 
 func JobHandlerSendMessage(queueURL string, message string, attributes map[string]*sqs.MessageAttributeValue) error {

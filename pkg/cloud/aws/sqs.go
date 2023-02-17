@@ -27,7 +27,7 @@ func NewSQS(session *session.Session, timeout time.Duration) SQS {
 
 func (s SQS) CreateQueue(ctx context.Context, queueName string, isDLX bool) (string, error) {
 	fmt.Println(s.timeout)
-	ctx, cancel := context.WithTimeout(ctx, 30*s.timeout)
+	ctx, cancel := context.WithTimeout(ctx, 90*s.timeout)
 	defer cancel()
 
 	ret := "345600" // 4 days
