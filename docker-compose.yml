@@ -2,12 +2,47 @@ version: "3.7"
 
 services:
   # Application
-  go-service-template:
-    extends:
-      file: docker/compose-common.yml
-      service: base-build
-    build:
-      args:
-        - SERVICE_PATH=go_service_template
+#  go-service-template:
+#    extends:
+#      file: docker/compose-common.yml
+#      service: base-build
+#    build:
+#      context: "../."
+#      dockerfile: "docker/Dockerfile"
+#      args:
+#        - SERVICE_PATH=go_service_template
+#    ports:
+#      - "8080:8080"
+#    volumes:
+#      - "../.:/app"
+
+  localstack:
+    image: localstack/localstack
+    privileged: true
     ports:
-      - 8080:8080
+      - "4566:4566"
+      - "4567-4582:4567-4582"
+      - "9070:9070"
+      - "8080:8080"
+    environment:
+      SERVICES: sqs,lambda,cloudwatch,s3
+      DOCKER_HOST: unix:///var/run/docker.sock
+      PORT_WEB_UI: 9070
+      LAMBDA_EXECUTOR: docker
+      LAMBDA_REMOTE_DOCKER: 1
+      LAMBDA_DOCKER_NETWORK: service-go-v1
+      DEBUG: 1
+      HOSTNAME_EXTERNAL: localstack
+      LEGACY_DIRECTORIES: 1
+    networks:
+      - service-go-v1
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /tmp/localstack:/tmp/localstack
+
+volumes:
+  data-volume:
+
+networks:
+  service-go-v1:
+    external: true

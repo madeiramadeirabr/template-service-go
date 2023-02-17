@@ -21,10 +21,14 @@ const (
 )
 
 type AppConfig struct {
-	Port           string `env:"PORT"`
-	ApplicationEnv string `env:"APPLICATION_ENV"`
-	IsTesting      bool   `env:"TESTING"`
-	ServiceName    string `env:"SERVICE_NAME"`
+	Port                string `env:"PORT"`
+	ApplicationEnv      string `env:"APPLICATION_ENV"`
+	IsTesting           bool   `env:"TESTING"`
+	ServiceName         string `env:"SERVICE_NAME"`
+	SqsEndpoint		    string `env:"SQS_ENDPOINT"`
+	SqsHost   			string `env:"SQS_HOST"`
+	SqsName   			string `env:"SQS_NAME"`
+	RegionName 			string `env:"REGION_NAME"`
 }
 
 func (appConfig AppConfig) IsDevelopmentEnvironment() bool {
@@ -56,9 +60,9 @@ func GetEnvBool(key string) bool {
 	return false
 }
 
-func Load() (*AppConfig, error) {
+func Load(dotenvfiles ...string) (*AppConfig, error) {
 	config := AppConfig{}
-	err := godotenv.Load()
+	err := godotenv.Load(dotenvfiles...)
 	if err != nil {
 		fmt.Println("[WARN] .env file not found. Loading from system environment")
 	}
@@ -66,5 +70,9 @@ func Load() (*AppConfig, error) {
 	config.ApplicationEnv = GetEnvString("APPLICATION_ENV")
 	config.IsTesting = GetEnvBool("TESTING")
 	config.ServiceName = GetEnvString("SERVICE_NAME")
+	config.SqsEndpoint = GetEnvString("SQS_ENDPOINT")
+	config.SqsHost = GetEnvString("SQS_HOST")
+	config.SqsName = GetEnvString("SQS_NAME")
+	config.RegionName = GetEnvString("REGION_NAME")
 	return &config, config.Validate()
 }
