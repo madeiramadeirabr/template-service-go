@@ -4,23 +4,20 @@ ARG SERVICE_PATH
 ##
 ## Stage: Base
 ##
-FROM golang:1.17-alpine AS base
+FROM golang:1.18-alpine AS base
 WORKDIR /app
 ADD . /app
 RUN go mod vendor \
     && go mod download
-
+RUN go get -u github.com/cosmtrek/air
+RUN go install github.com/cosmtrek/air@latest
 
 ##
 ## Stage: Development
 ##
 FROM base AS development
 ARG SERVICE_PATH
-RUN apk add curl \
-    && curl -sSfL https://raw.githubusercontent.com/cosmtrek/air/master/install.sh | sh -s -- -b $(go env GOPATH)/bin \
-    && sed "s/{SERVICE_PATH}/${SERVICE_PATH}/g" ./docker/air.toml > /root/.air.toml
-ENTRYPOINT ["air", "-c", "/root/.air.toml"]
-
+RUN sed "s/{SERVICE_PATH}/${SERVICE_PATH}/g" ./docker/air.toml > /root/.air.toml
 
 ##
 ## Stage: Build
